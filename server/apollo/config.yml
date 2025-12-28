@@ -1,0 +1,17 @@
+spectaql:
+  logoFile: ./logo.svg
+
+introspection:
+  url: 'http://localhost:5066/graphql'
+  headers:
+    Authorization: 'bearer REPLACE_WITH_YOUR_API_KEY'
+
+info:
+  title: Sangaraahi GraphQL API
+  contact:
+    name: SangaRaahi
+
+servers:
+  - url: 'http://localhost:5066/graphql'
+    description: local
+    production: false

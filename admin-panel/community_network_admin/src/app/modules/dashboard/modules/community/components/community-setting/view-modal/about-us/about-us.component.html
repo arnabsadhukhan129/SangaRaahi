@@ -1,0 +1,66 @@
+<div class="modal_block">
+  <div class="modal_close" (click)="closeDialog()">
+    <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+  </div>
+  <div class="modal_header">
+    <!-- <h2>{{data.type}}</h2> -->
+  </div>
+  <div class="modal_body">
+        <div *ngIf="(data.type=='boardMembers' || data.type=='executiveMembers');
+                then memberDiv
+                else otherDiv">
+        </div>
+
+        <ng-template #memberDiv>
+          <div class="modal_member_details">
+            <img class="modal_member_details_img"
+             [src]="(memberDetail?.members?.user?.profileImage!='' && memberDetail?.members?.user?.profileImage!=null)
+              ? memberDetail?.members?.user?.profileImage 
+              : 'https://www.plslwd.org/wp-content/plugins/lightbox/images/No-image-found.jpg' " >
+            <div class="modal_member_details_row">
+              <span class="modal_about_text_row modal_about_text_row_left">Name :</span>
+              <span class="modal_about_text_row modal_about_text_row_mid"></span>
+              <span class="modal_about_text_row modal_about_text_row_right">{{memberDetail?.members?.user?.name}}</span>
+            </div>
+            <div class="modal_member_details_row">
+              <span class="modal_about_text_row modal_about_text_row_left">Email :</span>
+              <span class="modal_about_text_row modal_about_text_row_mid"></span>
+              <span class="modal_about_text_row modal_about_text_row_right">{{memberDetail?.members?.user?.email}}</span>
+            </div>
+            <div class="modal_member_details_row">
+              <span class="modal_about_text_row modal_about_text_row_left">Phone :</span>
+              <span class="modal_about_text_row modal_about_text_row_mid"></span>
+              <span class="modal_about_text_row modal_about_text_row_right">{{memberDetail?.members?.user?.phone}}</span>
+            </div>
+            <div class="modal_member_details_row">
+              <span class="modal_about_text_row modal_about_text_row_left">Role :</span>
+              <span class="modal_about_text_row modal_about_text_row_mid"></span>
+              <span class="modal_about_text_row modal_about_text_row_right"> {{memberDetail?.members?.roles}}</span>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #otherDiv>
+          <div class="modal_member_details modal_body_des">
+            <div class="modal_member_details_row" *ngIf="data.type == 'isApproveCommunityAddress' ">
+              <span class="modal_about_text_row modal_about_text_row_full">{{(data.content.orgLocation!='' && data.content.orgLocation!=null) ? data.content.orgLocation : 'No Data Available' }}</span>
+            </div>
+            <div class="modal_member_details_row" *ngIf="data.type == 'isApproveCommunityEmailAddress' ">
+              <span class="modal_about_text_row modal_about_text_row_full">{{(data.content.orgCommunityEmail!='' && data.content.orgCommunityEmail!=null) ? data.content.orgCommunityEmail : 'No Data Available' }}</span>
+            </div>
+            <div class="modal_member_details_row" *ngIf="data.type == 'isApproveCommunityPhoneNumber' ">
+              <span class="modal_about_text_row modal_about_text_row_full">{{(data.content.orgCommunityNumber!='' && data.content.orgCommunityNumber!=null) ? data.content.orgCommunityNumber : 'No Data Available' }}</span>
+            </div>
+          </div>
+        </ng-template>
+
+  </div>
+
+  <!-- <div class="modal_bottom">
+    <button mat-button class="button_appearance_none modal_btn modal_btn_pink" >Reject</button>
+    <button mat-button class="button_appearance_none modal_btn modal_btn_yellow"  >Approve</button>
+  </div> -->
+
+</div>
+
+

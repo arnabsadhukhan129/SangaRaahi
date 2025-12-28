@@ -1,0 +1,27 @@
+<div class="modal_block">
+    <div class="modal_close" mat-button (click)="onNoBtnClick()">
+      <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+    </div>
+    <div class="modal_header">
+      <h2>{{data.dialogTitle}}</h2>
+    </div>
+    <div class="modal_body">
+      <div class="modal_body_head">
+        <p><strong>Description : &nbsp; </strong></p>
+        <div [innerHTML]="safeDescription"></div>
+
+        <p><strong>Current Email Balance : &nbsp; </strong>{{data.emailRemaining ? data.emailRemaining : data.email}}</p>
+      </div>
+      <!-- <h2>Description : {{data.communityDescription}}</h2> -->
+      <!-- <h2>Current Email Balance : </h2>{{saveRemainingSMSBalance}} -->
+      <!-- <h2>Current Email Balance : </h2>{{data.emailRemaining ? data.emailRemaining : data.email}} -->
+      <form [formGroup]="creditForm">
+        <div class="modal_input_block">
+          <input class="input_appearance_none modal_input" type="text" placeholder="Type no of Email that would be credited" formControlName="emailCredits" (keypress)="isNumber($event)">
+        </div>
+      </form>
+    </div>
+    <div class="modal_bottom">
+      <button mat-button class="button_appearance_none modal_btn modal_btn_yellow" color="primary" (click)="onYesClick(data)" cdkFocusInitial>Approve</button>
+    </div>
+</div>

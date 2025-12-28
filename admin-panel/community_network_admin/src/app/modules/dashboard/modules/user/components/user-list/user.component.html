@@ -1,0 +1,120 @@
+<div class="listView_contBg">
+  <div class="listion_header_sec">
+    <div class="listing_header_left">
+      <h2>Users: </h2>
+    </div>
+
+    <div class="listing_header_right">
+      <div class="listing_header_right">
+        <div class="search-bar">
+          <mat-form-field>
+            <mat-label> Search by user name </mat-label>
+            <input matInput type="text" #search (keyup)="getUsers(1,search.value)">
+          </mat-form-field>
+          <button class="list_search_btn" mat-raised-button (click)="getUsers(1,search.value)" ><span
+            class="icon-search"></span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="listing_table_bg">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="matTableDataSource" class="mat-elevation-z8 new_mat_table" matSort (matSortChange)="userSortChange($event)">
+
+        <ng-container matColumnDef="no">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let element; let i = index;"> {{current*10-(9-i)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Member Id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Member Id </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table_content_block min_w_150">{{element?.communityMemberId ? element?.communityMemberId : 'N/A'}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table_content_block min_w_150">{{element.name}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+          <td mat-cell *matCellDef="let element" class="min_w_150"> {{element.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Phone">
+          <th mat-header-cell *matHeaderCellDef> Phone </th>
+          <td mat-cell *matCellDef="let element" class="min_w_150"> {{element.phone}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Image">
+          <th mat-header-cell *matHeaderCellDef> Image </th>
+          <td mat-cell *matCellDef="let element">
+              <div *ngIf="!element.profileImage;then img_content else img_other_content"></div>
+              <ng-template #img_content>
+                <div class="table_td_img_block">
+                  <img class="td_img" src="/assets/images/header-user.png" width="50px" height="50px"/>
+                </div>
+              </ng-template>
+              <ng-template #img_other_content>
+                <div class="table_td_img_block">
+                  <img class="td_img" [src]="element.profileImage" width="50px" height="50px"/>
+                </div>
+              </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+
+          <td mat-cell *matCellDef="let element; let i = index;">
+            <div *ngIf="element.isActive;then content else other_content"></div>
+            <ng-template #content><button mat-button color="primary" class="active" (click)="markActiveInactive(element.id, i, 'Inactive')">Active</button></ng-template>
+            <ng-template #other_content><button mat-button color="warn" class="inactive" (click)="markActiveInactive(element.id, i, 'Active')">Inactive</button></ng-template>
+          </td>
+        </ng-container>
+
+        <!-- <ng-container matColumnDef="Reset Password">
+          <th mat-header-cell *matHeaderCellDef> Reset Password </th>
+
+          <td mat-cell *matCellDef="let element; let i = index;">
+          <button mat-button color="accent" (click)="resetPassword(element.id)">Reset</button>
+          </td>
+        </ng-container> -->
+
+        <ng-container matColumnDef="Actions" class="tableTd_action">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element let i = index;">
+            <button mat-icon-button color="primary" class="btn-green" aria-label="Example icon button with a home icon">
+              <mat-icon (click)="viewUser(element.id)">visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" class="btn-orange" aria-label="Example icon button with a home icon">
+              <mat-icon (click)="editUser(element.id)">edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" class="btn-red" aria-label="Example icon button with a home icon">
+              <mat-icon (click)="deleteUser(element.id, i)">delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <div class="table_no_record" *ngIf="total === 0">No records found</div>
+    <!-- <div *ngIf="total === 0">No records found</div> -->
+  </div>
+
+    <ng-template [ngIf]="total !== 0">
+      <div class="list_pagination">
+        <app-pagination [current]="current" [total]="total" (goTo)="onGoTo($event)" (next)="onNext($event)" (previous)="onPrevious($event)"></app-pagination>
+      </div>
+    </ng-template>
+</div>
+
+

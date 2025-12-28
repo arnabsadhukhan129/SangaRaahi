@@ -1,0 +1,40 @@
+ 
+<div class="tab-box">
+    <h3>Settings list for Donation Info Page</h3>
+    <div class="content-list">
+        <div class="content-row">
+            <div class="txt">Approve the community's donation QR logo</div>
+            <div class="action">
+                <button mat-button (click)="openDialog('orgQrcodeImage')"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="settingData?.qrcodeIsApproved" (change)="setValue('qrcodeIsApproved', $event)"></mat-slide-toggle>
+            </div>
+        </div>
+        <div class="content-row">
+            <div class="txt">Approve the community's payment message</div>
+            <div class="action">
+                <button mat-button (click)="openDialog('orgPaymentDescription')"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="settingData?.paymentDescriptionIsApproved" (change)="setValue('paymentDescriptionIsApproved', $event)"></mat-slide-toggle>
+            </div>
+        </div>
+        <div class="content-row">
+            <div class="txt">Approve the community's payable Authority Name</div>
+            <div class="action">
+                <button mat-button (click)="openDialog('orgAuthorityName')"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="settingData?.authorityNameIsApproved" (change)="setValue('authorityNameIsApproved', $event)"></mat-slide-toggle>
+            </div>
+        </div>
+        <div class="content-row">
+            <div class="txt">Approve the community's other payable link</div>
+            <div class="action">
+                <button mat-button (click)="openDialog('orgLink')"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="settingData?.otherpaymentLinkIsApproved" (change)="setValue('otherpaymentLinkIsApproved', $event)"></mat-slide-toggle>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="setting-btn">
+    <button mat-button class="btn-red" [routerLink]="['/dashboard/community']">Cancel</button>
+    <button mat-button class="btn-orange" (click)="updateData('')">Save Donation Settings</button>
+    <button mat-button class="btn-green" (click)="updateData('next')">Save Donation Settings & Next</button>
+</div>

@@ -1,0 +1,92 @@
+<div class="listView_contBg">
+    <div class="listion_header_sec">
+      <div class="listing_header_left">
+        <h2>Announcements: </h2>
+      </div>
+      <div class="listing_header_right">
+        <div class="listing_header_right">
+          <div class="search-bar">
+            <mat-form-field>
+              <mat-label> Search by Announcement name </mat-label>
+              <input matInput type="text" #search (keyup)="getAllAnnouncement(1,search.value)" >
+            </mat-form-field>
+            <button class="list_search_btn" mat-raised-button (click)="getAllAnnouncement(1,search.value)" ><span
+              class="icon-search"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing_table_bg">
+      <div class="table-responsive">
+        <table mat-table [dataSource]="matTableDataSource" class="mat-elevation-z8 new_mat_table" matSort (matSortChange)="eventSortChange($event)">
+
+          <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let element; let i = index;"> {{current*10-(9-i)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="AnnouncementName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Announcement Name </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="table_content_block">{{element.title}}</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="AnnouncementType">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+              <td mat-cell *matCellDef="let element"> {{element.toWhom}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="CommunityName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Community Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.community.communityName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EndDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.endDate}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Status">
+            <th mat-header-cell *matHeaderCellDef> Status </th>
+
+            <td mat-cell *matCellDef="let element; let i=index">
+              <div *ngIf="element.isActive;then content else other_content">here is ignored</div>
+              <ng-template #content><button mat-button color="primary" class="active" (click)="markActiveInactive(element.id, i, 'Inactive')">Active</button></ng-template>
+              <ng-template #other_content><button mat-button color="warn" class="inactive" (click)="markActiveInactive(element.id, i, 'Active')">Inactive</button></ng-template>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element; let i=index">
+              <button mat-icon-button color="primary" class="btn-green" aria-label="Example icon button with a home icon">
+                <mat-icon (click)="viewAnnouncement(element.id)">visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" class="btn-orange" aria-label="Example icon button with a home icon">
+                <mat-icon (click)="editAnnouncement(element.id)">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" class="btn-red" aria-label="Example icon button with a home icon">
+                <mat-icon (click)="deleteAnnouncement(element.id, i)">delete</mat-icon>
+              </button>
+            </td>
+
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      <div class="table_no_record"  *ngIf="total === 0">No records found</div>
+      <ng-template [ngIf]="total !== 0">
+        <div class="list_pagination">
+        <app-pagination [current]="current" [total]="total" (goTo)="onGoTo($event)" (next)="onNext($event)" (previous)="onPrevious($event)"></app-pagination>
+      </div>
+      </ng-template>
+    </div>
+
+
+
+

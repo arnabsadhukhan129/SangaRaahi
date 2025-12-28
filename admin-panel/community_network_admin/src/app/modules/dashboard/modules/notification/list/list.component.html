@@ -1,0 +1,75 @@
+<div class="listView_contBg">
+  <div class="listion_header_sec">
+    <div class="listing_header_left">
+      <h2>Notification List:  </h2>
+    </div>
+    <!-- <div class="listing_header_right">
+      <div class="listing_header_right">
+        <div class="search-bar">
+
+        </div>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="listing_table_bg">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="matTableDataSource" class="mat-elevation-z8 new_mat_table" matSort (matSortChange)="notificationSortChange($event)">
+
+        <ng-container  matColumnDef="no">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let element; let i = index;"> {{current*10-(9-i)}} </td>
+        </ng-container>
+
+         <!-- <ng-container  matColumnDef="Subject">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table_content_block min_w_150">{{element.subject | truncate: 30}}</div>
+          </td>
+        </ng-container> -->
+
+        <ng-container  matColumnDef="Message">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Message</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table_content_block min_w_150">{{element?.text | truncate: 30}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container  matColumnDef="Send">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Send Date</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="table_content_block min_w_150">{{element?.sentAt | date:'short'}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element; let i=index">
+            <button mat-icon-button color="primary" class="btn-green" aria-label="Example icon button with a home icon">
+              <mat-icon (click)="viewDetails(element)">visibility</mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary" class="btn-orange"  [disabled]="!element?.communityId && !element?.slug">
+              <mat-icon (click)="redirectToApprovalPage(element)">call_made</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <div class="table_no_record"  *ngIf="total === 0">No records found</div>
+  </div>
+
+  <ng-template [ngIf]="total !== 0">
+    <div class="list_pagination">
+      <app-pagination [current]="current" [total]="total" (goTo)="onGoTo($event)" (next)="onNext($event)" (previous)="onPrevious($event)"></app-pagination>
+    </div>
+  </ng-template>
+</div>
+
+
+
+
+

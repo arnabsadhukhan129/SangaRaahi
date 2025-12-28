@@ -1,0 +1,76 @@
+<div class="modal_block">
+  <div class="modal_close" mat-button (click)="closeModal()">
+    <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+  </div>
+  <div class="modal_header">
+    <h2>{{data.dialogTitle}}</h2>
+  </div>
+  <div class="modal_body">
+
+    <div class="modal_view_block modal_view_block_pdf" mat-dialog-content *ngIf="fileExtension=='pdf'">
+     <!-- <pdf-viewer class="pdf_viewer" src="{{data.pdfLink}}" [render-text]="true" [original-size]="false" style="width: auto; min-width: 400px; height: 500px; min-height: auto; " ></pdf-viewer> -->
+     <pdf-viewer class="pdf_viewer" src="{{data.pdfLink}}" [render-text]="true" [original-size]="true" [fit-to-page]="true" [show-borders]="true" ></pdf-viewer>
+    </div>
+
+    <div *ngIf="fileExtension=='jpg' || fileExtension=='jpeg' || fileExtension=='png'">
+      <div class="modal_member_details">
+        <img  [src]="data.pdfLink" />
+      </div>
+    </div>
+
+    <div *ngIf="fileExtension=='docx' || fileExtension=='doc' || fileExtension=='xls' || fileExtension=='xlsx'">
+      <div class="modal_body_des">
+          <a class="modal_view_link_btn modal_btn mat-button" target="_blank" [href]="safeSrc">Click here to view</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal_bottom">
+    <div class="btn_row">
+      <a class="button_appearance_none modal_btn modal_view_link_btn" href="{{data.pdfLink}}" target="_blank">Download</a>
+    </div>
+    <button mat-button class="button_appearance_none modal_btn modal_btn_pink" (click)="changeStatus(false)">Reject</button>
+    <button mat-button class="button_appearance_none modal_btn modal_btn_yellow" (click)="changeStatus(true)">Approve</button>
+  </div>
+
+</div>
+
+
+<!-- ================   old code start ==========   -->
+
+<!--
+<button class="close" mat-button (click)="closeModal()">X</button>
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div><a href="{{data.pdfLink}}" target="_blank">Download</a><div>
+
+<div mat-dialog-content *ngIf="fileExtension=='pdf'">
+
+      <pdf-viewer
+      src="{{data.pdfLink}}"
+      [render-text]="true"
+      [original-size]="false"
+      style="width: 800px; height: 600px"
+    ></pdf-viewer>
+
+</div>
+
+<div *ngIf="fileExtension=='jpg' || fileExtension=='jpeg' || fileExtension=='png'">
+        <img [src]="data.pdfLink" />
+</div>
+
+<div *ngIf="fileExtension=='docx' || fileExtension=='doc' || fileExtension=='xls' || fileExtension=='xlsx'">
+
+  <a target="_blank" [href]="safeSrc">Click here to view</a>
+
+</div>
+
+<div mat-dialog-actions *ngIf="data.bankcheckStatus!='Approved' && data.bankcheckStatus!='Rejected'">
+  <button mat-button (click)="changeStatus(false)">Reject</button>
+  <button mat-button (click)="changeStatus(true)">Approve</button>
+</div>
+
+ -->
+
+
+<!-- ================   old code end ==========  -->

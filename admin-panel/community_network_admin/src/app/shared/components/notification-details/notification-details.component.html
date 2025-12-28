@@ -1,0 +1,18 @@
+<div class="modal_block">
+  <div class="modal_close" mat-button (click)="onYesClick()">
+    <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+  </div>
+  <div class="modal_header">
+    <h2 mat-dialog-title >{{data.title ? data.title : 'N/A'}}</h2>
+  </div>
+  <div class="modal_body">
+
+    <div class="modal_body_des">
+      <P><b style="color: #f88733;">Subject:</b> {{data.dialogTitle ? data.dialogTitle : 'N/A'}}</P>
+      <p><b style="color: #f88733;">Message:</b> {{data.dialogMessage ? data.dialogMessage : 'N/A'}}</p>
+    </div>
+
+  </div>
+</div>
+
+

@@ -1,0 +1,108 @@
+<section class="backBtn_sec">
+  <div class="leftBtn_block">
+      <button class="button_appearance_none adminPage_top_back_btn" mat-raised-button color="primary" [routerLink]="['/dashboard/group']">Back</button>
+  </div>
+</section>
+
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+  <mat-card class="userView_block userView_block_userDetails">
+      <mat-card-title>Group Details</mat-card-title>
+      <mat-card-content class="matcard_userDetails_view">
+        <h3 class="content"><strong>Group Name: </strong> {{group.name}}</h3>
+        <h3 class="content"><strong>Group Description: </strong> {{group.description}}</h3>
+        <h3 class="content"><strong>Community Name: </strong> {{community.communityName}}</h3>
+        <h3 class="content"><strong>Community Description: </strong> {{community.communityDescription}}</h3>
+      </mat-card-content>
+  </mat-card>
+</section>
+
+<!-- <div class="listView_contBg">
+
+  <div class="listion_header_sec justify_center">
+    <div class="listing_header_left">
+      <h2>Members:</h2>
+    </div>
+    <div class="listing_header_right">
+      
+    </div>
+  </div>
+
+  <div class="listing_table_bg user_listing_table_center">
+    <table mat-table [dataSource]="member" class="mat-elevation-z8 new_mat_table">
+      <ng-container matColumnDef="no">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+      </ng-container>
+      <ng-container matColumnDef="MemberName">
+        <th mat-header-cell *matHeaderCellDef> Member Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="MemberEmail">
+        <th mat-header-cell *matHeaderCellDef> Member Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      </ng-container>
+      <ng-container matColumnDef="Roles">
+        <th mat-header-cell *matHeaderCellDef> Roles </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.roles}}
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <div class="list_pagination">
+    
+  </div>
+
+</div> -->
+
+<!-- old code -- start --- -->
+
+<!-- 
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-card>
+      <button mat-raised-button color="primary" [routerLink]="['/dashboard/group']">Back</button>
+        <mat-card-title>Group Details</mat-card-title>
+        <mat-card-content>
+                <h3 class="content"><strong>Group Name: </strong> {{group?.name}}</h3>
+                <h3 class="content"><strong>Group Description: </strong> {{group?.description}}</h3>
+                <h3 class="content"><strong>Community Name: </strong> {{community?.communityName}}</h3>
+                <h3 class="content"><strong>Community Description: </strong> {{community?.communityDescription}}</h3>
+        </mat-card-content>
+        <div style="margin-left: 300px;">
+            <br>
+            <h1 Style="color: brown;">Members: </h1>
+        </div>
+        <div>
+          <br>
+          <table mat-table [dataSource]="member" class="mat-elevation-z8">
+              <ng-container matColumnDef="no">
+                <th mat-header-cell *matHeaderCellDef> No. </th>
+                <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+              </ng-container>
+              <ng-container matColumnDef="MemberName">
+                <th mat-header-cell *matHeaderCellDef> Member Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              </ng-container>
+              <ng-container matColumnDef="MemberEmail">
+                <th mat-header-cell *matHeaderCellDef> Member Email </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Roles">
+                <th mat-header-cell *matHeaderCellDef> Roles </th>
+                <td mat-cell *matCellDef="let element">
+                  {{element.roles}}
+                </td>
+              </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+    </mat-card>
+</section> 
+-->
+
+
+<!-- old code -- end --- -->

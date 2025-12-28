@@ -1,0 +1,90 @@
+<div class="tab-box">
+    <h3>Settings list for About Us Page</h3>
+    <div class="content-list">
+        <div class="content-row">
+            <div class="txt">Approve the community's address</div>
+            <div class="action">
+                <button mat-button (click)="openDialog('isApproveCommunityAddress')"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="settingData?.isApproveCommunityAddress" (change)="setValue('isApproveCommunityAddress', $event)"></mat-slide-toggle>
+            </div>
+        </div>
+        <div class="content-row">
+            <div class="txt">Approve the community's email address</div>
+            <div class="action">
+                <button mat-button (click)="openDialog('isApproveCommunityEmailAddress')"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="settingData?.isApproveCommunityEmailAddress" (change)="setValue('isApproveCommunityEmailAddress', $event)"></mat-slide-toggle>
+            </div>
+        </div>
+        <div class="content-row">
+            <div class="txt">Approve the community's phone no.</div>
+            <div class="action">
+                <button mat-button (click)="openDialog('isApproveCommunityPhoneNumber')"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="settingData?.isApproveCommunityPhoneNumber" (change)="setValue('isApproveCommunityPhoneNumber', $event)"></mat-slide-toggle>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tab-box">
+    <h3>Settings for Board Member list</h3>
+    <div class="content-list">
+
+        <div class="content-row" *ngFor="let member of boardMembers">
+            <div class="txt">
+                <div class="pic">
+                    <img [src]="(member?.members?.user?.profileImage!=null && member?.members?.user?.profileImage!='') 
+                    ? member?.members?.user?.profileImage 
+                    : 'https://www.plslwd.org/wp-content/plugins/lightbox/images/No-image-found.jpg' " alt="member">
+                </div>
+                <div class="name">{{member?.members?.user?.name}}</div>
+            </div>
+            <div class="action">
+                <button mat-button (click)="openDialog('boardMembers', member)"><span class="btn-popup"></span></button>
+                <mat-slide-toggle [checked]="member?.members?.isAdminApproved" (change)="setMemebrsValue(member?.members?.memberId, $event)"></mat-slide-toggle>
+            </div>
+        </div> 
+        
+        <div class="content-row" *ngIf="boardMembers.length == 0">
+            <div class="txt">
+                <div class="name">No Board Member Found</div>
+            </div>
+        </div> 
+      
+    </div>
+</div>
+
+
+<div class="tab-box">
+    <h3>Settings for Executive Member list</h3>
+    <div class="content-list">
+
+        <div class="content-row" *ngFor="let member of executiveMembers">
+            <div class="txt">
+                <div class="pic">
+                    <img [src]="(member?.members?.user?.profileImage!=null && member?.members?.user?.profileImage!='')
+                    ? member?.members?.user?.profileImage
+                    : 'https://www.plslwd.org/wp-content/plugins/lightbox/images/No-image-found.jpg' " alt="member">
+                </div>
+                <div class="name">{{member?.members?.user?.name}}</div>
+            </div>
+            <div class="action">
+                <button mat-button (click)="openDialog('executiveMembers', member)"><span class="btn-popup"></span></button>
+                <mat-slide-toggle [checked]="member?.members?.isAdminApproved" (change)="setMemebrsValue(member?.members?.memberId, $event)"></mat-slide-toggle>
+            </div>
+        </div>
+
+
+        <div class="content-row" *ngIf="executiveMembers.length == 0">
+            <div class="txt">
+                <div class="name">No Executive Member Found</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="setting-btn">
+    <button mat-button class="btn-red" [routerLink]="['/dashboard/community']">Cancel</button>
+    <button mat-button class="btn-orange" (click)="updateData('')">Save About Us Settings</button>
+    <button mat-button class="btn-green" (click)="updateData('next')">Save About Us Settings & Next</button>
+</div>

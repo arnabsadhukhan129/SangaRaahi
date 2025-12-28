@@ -1,0 +1,15 @@
+/* Your Angular component CSS file */
+.remove-arrows {
+    /* Firefox */
+    -moz-appearance: textfield;
+  
+    /* WebKit/Blink */
+    appearance: textfield;
+  
+    /* Remove the increment and decrement arrows in IE 10 and above */
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }

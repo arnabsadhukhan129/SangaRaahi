@@ -1,0 +1,94 @@
+<div>
+    <mat-card class="matCard_block">
+    <mat-card-content>
+        <form [formGroup]="updateUser" (ngSubmit)="submit()" autocomplete="off" (keydown.enter)="$event.preventDefault()">
+
+            <div class="mat-title"><h1>{{isEdit}} Admin Profile</h1></div>
+
+            <div class="profile_img_block">
+
+              <div class="edit_profile_img_block">
+                <img class="edit_profile_img" src="{{image}}" width="70px" height="70px" alt="Avatar"/>
+              </div>
+                <ng-template #other_content >
+                  <button class="pro_img_edit_btn" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                      <mat-icon (click)="editProfile()">edit</mat-icon>
+                  </button>
+                </ng-template>
+                <ng-template #content>
+                    <button class="pro_img_edit_btn" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                        <mat-icon (click)="editCancel()">clear</mat-icon>
+                    </button>
+                </ng-template>
+
+            </div>
+
+                <div *ngIf="isEdit === '';then other_content else content">here is ignored</div>
+
+                <div *ngIf="isEdit === 'Edit';then photo">here is ignored</div>
+                <ng-template #photo>
+                    <div class="mat_form_row form_fileup_row">
+                        <mat-form-field>
+                            <div>
+                              <mat-toolbar>
+                                <!-- Display files names -->
+                                <input matInput placeholder="{{fileAttr}}" readonly type="text" name="imageName" />
+                                <!-- Browse Button -->
+                                <button mat-flat-button color="primary">Browse File</button>
+                              </mat-toolbar>
+                              <!-- Fetch selected filed on change -->
+                              <input
+                                type="file"
+                                #fileInput
+                                id="uploadFile"
+                                (change)="uploadFileToS3Bucket($event)"
+                                name="uploadFile"
+                                multiple="multiple"
+                                accept="image/*"
+                              />
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </ng-template>
+
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Name: </mat-label>
+                        <div *ngIf="isEdit === '';then img_other_content else img_content">here is ignored</div>
+                        <ng-template #img_content>
+                            <input matInput type="text" formControlName="name">
+                            <ng-template *ngIf="updateUser.get('name')!.hasError('required')">
+                                <mat-error>
+                                    Name is Required
+                                </mat-error>
+                            </ng-template>
+                        </ng-template>
+                        <ng-template #img_other_content>
+                            <input matInput type="text" formControlName="name" readonly>
+                        </ng-template>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Email: </mat-label>
+                        <input matInput type="email" formControlName="email" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Phone: </mat-label>
+                        <input matInput type="number" formControlName="phone" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_button_sec">
+
+                    <!-- <div *ngIf="isEdit === 'Edit';then submit">here is ignored</div>
+                    <ng-template #submit> -->
+                        <button class="formBtn_layout" mat-raised-button color="accent" type="submit" [disabled]="!updateUser.valid">Submit</button>
+                    <!-- </ng-template> -->
+                    <button class="formBtn_layout" mat-raised-button color="primary" [routerLink]="['/dashboard']">Back</button>
+                </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+</div>

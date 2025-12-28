@@ -1,0 +1,23 @@
+ <div class="tab-box">
+    <h3>Settings list for Video Listing Page</h3>
+    <div class="content-list" *ngFor="let item of getVideoSettingData;let i = index">
+        <div class="content-row">
+            <div class="txt">{{item.link}}</div>
+            <div class="action">
+                <button mat-button (click)="openDialog(i)"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="item?.isApproved" (change)="setValue(i, $event)"></mat-slide-toggle>
+            </div>
+        </div>
+    </div>
+    <div class="content-list" *ngIf="!getVideoSettingData?.length">
+        <div class="content-row">
+            No videos avilable!
+        </div>
+    </div>
+</div>
+
+<div class="setting-btn">
+    <button mat-button class="btn-red" [routerLink]="['/dashboard/community']">Cancel</button>
+    <button mat-button class="btn-orange" (click)="saveVideoTab('')">Save Videopage Settings</button>
+    <button mat-button class="btn-green" (click)="saveVideoTab('next')">Save Videopage Settings & Next</button>
+</div>

@@ -1,0 +1,112 @@
+@media (max-width: 1024px) {
+
+  .function_head_block .formBtn_layout {
+    margin: 0 5px !important;
+  }
+  .function_head_block .mat-raised-button {
+    padding: 0 10px;
+  }
+  .formBtn_layout {
+    margin: 0 5px !important;
+  }
+
+}
+
+@media (max-width: 767px) {
+
+
+  .header-top .profile-name { width: 80px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
+  .headr_userMenu { margin-top: 8px;}
+  .search-bar {
+    margin: 0 10px 0 0 !important;
+  }
+
+  .listion_header_sec { flex-wrap: wrap;}
+  .listion_header_sec .listing_header_left, .listion_header_sec .listing_header_right { width: 100%;}
+  .listion_header_sec .listing_header_left { padding-bottom: 15px;}
+
+  .listing_table_bg { margin-top: 20px; }
+  .listView_contBg { padding: 30px 20px; overflow-x: hidden;}
+  .listing_table_bg th.mat-header-cell, .listing_table_bg td.mat-cell,
+  .listing_table_bg td.mat-footer-cell { white-space: nowrap;}
+
+  .list_pagination { margin-top: 20px;}
+
+  .settings-container { margin-bottom: 20px;}
+  .settings-container .mat-tab-header, .settings-container .mat-tab-label-container { overflow: hidden;}
+  .settings-container .mat-tab-label { margin-right: 20px;}
+  .settings-container .mat-tab-list .mat-ink-bar { height: 4px; bottom: -1px;}
+  .setting-btn button { width: 100%;}
+
+  .content-list, .content-list .content-row { padding: 10px;}
+  .content-list .content-row .txt .pic img {width: 30px; height: 30px;}
+  .tab-box {padding-bottom: 20px;}
+  .tab-box h3 { font-size: 15px; padding: 0 0 15px;}
+
+
+  /* login page start */
+
+  .login-box {padding: 30px 20px;}
+
+  /* login page end */
+
+  /* Modal -- start */
+  .modal_member_details {
+    min-width: auto;
+  }
+  .modal_member_details_row {
+    flex-direction: column;
+  }
+  span.modal_about_text_row.modal_about_text_row_left {
+    width: 100%;
+  }
+  span.modal_about_text_row.modal_about_text_row_right {
+    width: 100%;
+  }
+  span.modal_about_text_row.modal_about_text_row_mid {
+    display: none;
+  }
+  .modal_member_details_row {
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    border-bottom: 1px dashed #fff;
+  }
+  .modal_header h2 {
+    font-size: 20px;
+  }
+  .modal_member_details img {
+    max-height: 250px;
+  }
+  .btn_row {
+    margin: 0px auto;
+  }
+
+  /* == table head -- start == */
+  .table_head_function_wrap {
+    flex-direction: column;
+  }
+  /* == table head -- end == */
+
+  .mat_form_row.form_fileup_row {
+    flex-direction: column;
+    gap: 0px;
+  }
+
+
+}
+
+@media (max-width: 640px) {
+
+  .notification_modal .community_btn_block_modal {
+    min-width: auto;
+  }
+  .mat_card_custom {
+    max-width: 90%;
+    padding: 30px 25px;
+  }
+
+
+}

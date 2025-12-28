@@ -1,0 +1,145 @@
+<mat-card class="matCard_block">
+    <mat-card-content>
+        <form [formGroup]="createUser" (ngSubmit)="submit()" autocomplete="off" (keydown.enter)="$event.preventDefault()">
+            <div class="mat-title"><h1>{{isEdit}}</h1></div>
+            <div class="mat_form_box">
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>User Type</mat-label>
+                        <mat-select required formControlName="userType">
+                            <mat-option value="user">User</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="createUser.get('userType')!.errors"> User Type is Required </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Name: </mat-label>
+                        <input matInput type="text" formControlName="name">
+                        <mat-error *ngIf="createUser.get('name')!.hasError('required') ">
+                            Name is Required
+                        </mat-error>
+                        <mat-error *ngIf="createUser.get('name')!.hasError('cannotContainSpace')">
+                            Name cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Email: </mat-label>
+                        <input matInput type="email" formControlName="email" (keydown.space)="$event.preventDefault()">
+                        <mat-error *ngIf="createUser.get('email')!.hasError('required')">
+                            Email is Required
+                        </mat-error>
+                        <mat-error *ngIf="createUser.get('email')!.hasError('pattern')">
+                            Enter proper email format
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field  appearance="fill">
+                        <mat-label>Country Code</mat-label>
+                        <input type="text"
+                            placeholder="Pick one"
+                            aria-label="Number"
+                            matInput
+                            formControlName="countryCode"
+                            [matAutocomplete]="auto"
+                            (keyup)="searchCountry($event)">
+                        <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let country of filteredOptions" [value]="country.dialCode" (click)="addCountryCode(country)">
+                            {{country.name}} - [{{country.dialCode}}]
+                        </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="createUser.get('countryCode')!.hasError('required')">
+                            Country code is required
+                        </mat-error>
+                        <mat-error *ngIf="createUser.get('countryCode')!.hasError('cannotContainSpace')">
+                            Country code can not contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Phone: </mat-label>
+                        <input matInput type="number" formControlName="phone" (keypress)="numericOnly($event)" (keydown.space)="$event.preventDefault()">
+                        <mat-error *ngIf="createUser.get('phone')!.hasError('required')"> Valid phone is Required </mat-error>
+                        <mat-error *ngIf="createUser.get('phone')!.hasError('min')"> Phone No. must be contain more than 7 digit</mat-error>
+                        <mat-error *ngIf="createUser.get('phone')!.hasError('max')"> Phone No. must be contain less than 13 digit </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row form_fileup_row">
+                  <div class="fileup_img_block">
+                    <!-- <img class="fileup_img" src="{{image}}" width="70px" height="70px" alt="Avatar" style="float: left;"/> -->
+                     <img class="fileup_img" *ngIf="image" [src]="image" width="70px" height="70px" alt="Avatar" style="float: left;" />
+                  </div>
+                  <mat-form-field class="mat_img_up">
+                      <div>
+                          <mat-toolbar>
+                          <!-- Display files names -->
+                          <input matInput placeholder="Choose Profile Image" readonly type="text" name="imageName" />
+                          <!-- Browse Button -->
+                          <button mat-flat-button color="primary">Browse File</button>
+                          </mat-toolbar>
+                          <!-- Fetch selected filed on change -->
+                          <!-- <input
+                          type="file"
+                          #fileInput
+                          id="uploadFile"
+                          (change)="uploadFileToS3Bucket($event)"
+                          name="uploadFile"
+                          multiple="multiple"
+                          accept="image/*"
+                          /> -->
+                          <input
+                            type="file"
+                            #fileInput
+                            id="uploadFile"
+                            (change)="uploadFileToS3Bucket($event)"
+                            name="uploadFile"
+                            accept="image/*"
+                            />
+                            <!-- <img class="fileup_img" *ngIf="image" [src]="image" width="70px" height="70px" alt="Uploaded Image" /> -->
+                      </div>
+                  </mat-form-field>
+                </div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter Date of Birth</mat-label>
+                    <input matInput [matDatepicker]="picker" [max]="maxDate" formControlName="dateOfBirth">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Address: </mat-label>
+                        <input matInput type="text" formControlName="address">
+                        <mat-error *ngIf="createUser.get('address')!.hasError('cannotContainSpace')">
+                            Address cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> City : </mat-label>
+                        <input matInput type="text" formControlName="city">
+                        <mat-error *ngIf="createUser.get('city')!.hasError('cannotContainSpace')">
+                            City cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Zipcode : </mat-label>
+                        <input matInput type="text" formControlName="zipcode" (keydown.space)="$event.preventDefault()">
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_button_sec">
+                    <button class="formBtn_layout" mat-raised-button color="accent" type="submit" [disabled]="!createUser.valid">Submit</button>
+                    <button class="formBtn_layout" mat-raised-button color="primary" [routerLink]="['/dashboard/user']">Back</button>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

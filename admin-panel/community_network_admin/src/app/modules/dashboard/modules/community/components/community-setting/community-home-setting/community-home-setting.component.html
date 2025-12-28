@@ -1,0 +1,36 @@
+
+<div class="tab-box">
+    <h3>Settings list for Home Page</h3>
+    <div class="content-list">
+        <form [formGroup]="communityHomeForm">
+            <div class="content-row">
+                <div class="txt">Approve the community’s logo</div>
+                <div class="action">
+                    <button mat-button (click)="openDialog('logoImageApproval')"><span class="btn-search"></span></button>
+                    <mat-slide-toggle formControlName="logoImageApproval"></mat-slide-toggle>
+                </div>
+            </div>
+            <div class="content-row">
+                <div class="txt">Approve the Banner Image</div>
+                <div class="action">
+                    <button mat-button (click)="openDialog('bannerImageApproval')"><span class="btn-search"></span></button>
+                    <mat-slide-toggle formControlName="bannerImageApproval"></mat-slide-toggle>
+                </div>
+            </div>
+            <div class="content-row">
+                <div class="txt">Approve the Description</div>
+                <div class="action">
+                    <button mat-button (click)="openDialog('communityDescriptionApproval')"><span class="btn-search"></span></button>
+                    <mat-slide-toggle formControlName="communityDescriptionApproval"></mat-slide-toggle>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="setting-btn">
+    <button mat-button class="btn-red" [routerLink]="['/dashboard/community']">Cancel</button>
+    <button mat-button class="btn-orange" (click)="saveHomeTab('')">Save Homepage settings</button>
+    <button mat-button class="btn-green" (click)="saveHomeTab('next')">Save Homepage settings & Next</button>
+</div>
+

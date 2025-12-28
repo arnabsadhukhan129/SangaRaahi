@@ -1,0 +1,51 @@
+{
+  "name": "sanga-raahi",
+  "version": "1.0.0",
+  "description": "SangaRaahi server Apollo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "serve": "nodemon server.js",
+    "staging-bck": "pm2 start server.js --ignore-watch app/logs/error.log -i max --name sanga-raahi-api-staging",
+    "staging:stop-bck": "pm2 stop sanga-raahi-api-staging && pm2 delete sanga-raahi-api-staging",
+    "staging": "pm2 start process.json -i max --name sanga-raahi-api-process",
+    "staging:stop": "pm2 stop sanga-raahi-api-staging && pm2 delete sanga-raahi-api-staging"
+  },
+  "author": "matrixmedia",
+  "license": "MIT",
+  "dependencies": {
+    "@vonage/server-sdk": "^3.10.0",
+    "apollo-server-express": "^3.13.0",
+    "aws-sdk": "^2.1561.0",
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.1",
+    "firebase-admin": "^11.2.0",
+    "graphql": "^15.8.0",
+    "graphql-middleware": "^6.1.32",
+    "graphql-tools": "^8.3.1",
+    "i18n": "^0.15.0",
+    "ioredis": "^5.7.0",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.30.1",
+    "mongoose": "^6.12.6",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^3.2.10",
+    "node-url-shortener": "^2.0.3",
+    "nodemailer": "^6.9.9",
+    "socket.io-client": "^4.7.5",
+    "stripe": "^16.6.0",
+    "striptags": "^3.2.0",
+    "twilio": "^2.5.2",
+    "winston": "^3.8.1",
+    "winston-daily-rotate-file": "^4.7.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@babel/helper-compilation-targets": "^7.18.6",
+    "nodemon": "^2.0.19"
+  }
+}

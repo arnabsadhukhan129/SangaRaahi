@@ -1,0 +1,5 @@
+- Add changes first
+- git checkout main
+- git pull origin main
+- git checkout abhirup-development
+- git merge main

@@ -1,0 +1,638 @@
+{
+    "users": [
+        {
+            "name": "",
+            "contact": {
+                "email": {
+                    "address": "",
+                    "is_verified": false,
+                    "verified_at": "timestamp"
+                },
+                "phone": {
+                    "number": "",
+                    "is_verified": false,
+                    "verified_at": "timestamp"
+                },
+                "address": {
+                    "address_line1": "",
+                    "address_line2": "",
+                    "country": "India",
+                    "state": "WB",
+                    "city": "",
+                    "zip_code": "",
+                    "latitude": "",
+                    "longitude": ""
+                }
+            },
+            "user_type": "ENUM('Admin', 'User')",
+            "profile_image": "",
+            "date_of_birth": {
+                "value": "date",
+                "is_masked": true
+            },
+            "gender": "ENUM(MALE, FEMALE, OTHERS)",
+            "hobbies": [
+                "Cycling",
+                "Watching Anime",
+                "Reading Manga"
+            ],
+            "area_of_work": [
+                "Developer",
+                "Slacker",
+                "Traveller"
+            ],
+            "profession": [
+                "IT"
+            ],
+            "about_yourself": "Ore wa Hokage ni naru. Dattebayo!",
+            "family_members": [
+                {
+                    "user_id": "[optional] | NULL",
+                    "age_of_minority": "ENUM[Adult, Minor] | NULL [Optional]",
+                    "relation_type": "",
+                    "member_name": "",
+                    "member_image": "",
+                    "is_deleted": "true | false",
+                    "created_at": "timestamp",
+                    "updated_at": "timestamp"
+                }
+            ],
+            "contacts": [
+                {
+                    "user_id": "contact user id",
+                    "contact_name": "",
+                    "contact_image": "",
+                    "contact_phone": "",
+                    "is_deleted": "true | false",
+                    "created_at": "timestamp",
+                    "updated_at": "timestamp"
+                }
+            ],
+            "selected_community": "community id",
+            "is_active": "true | false",
+            "is_deleted": "true | false",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    ],
+    "authentication": {
+        "user_id": "5fe06c14209fb1594e221532",
+        "phone": "9878654532 | NULL",
+        "email": "email@mailinator.com | NULL",
+        "init_timestamp": "2020-12-21T09:34:11.970+0000",
+        "remote": {
+            "ip": "1",
+            "country": {
+                "country_code": "IN",
+                "country": "India",
+                "locality": "West Bengal"
+            },
+            "user_agent": "PostmanRuntime/7.26.8"
+        },
+        "status": {
+            "code": 2011,
+            "description": "OTP sent"
+        },
+        "otp": {
+            "number": 410139,
+            "generation_time": "2020-12-21T09:34:11.974+0000",
+            "expiry_timestamp": "2020-12-21T10:04:11.974+0000"
+        },
+        "token": {
+            "is_logged_in": true,
+            "issued_at": "timestamp",
+            "expired_at": "timestamp"
+        }
+    },
+    "communities": {
+        "owner_id": "The user id who created the community",
+        "community_type": "EMUM(Social, Cultural, Religious, Other)",
+        "banner_image": "",
+        "community_name": "",
+        "community_description": "",
+        "community_location": "",
+        "non_profit": "true | false",
+        "non_profit_tax_id": "ID | NULL",
+        "members": [
+            {
+                "member_id": "the user id",
+                "roles": [
+                    "board_member"
+                ],
+                "is_approved": "true | false",
+                "is_rejected": "true | false",
+                "member_promotions": [
+                    {
+                        "type": "ENUM(Promotion, Demotion)",
+                        "date": "timestamp",
+                        "status": "ENUM(Pending, Approved, Rejected, Completed) -> ",
+                        "path": {
+                            "to": "Member",
+                            "from": "Fan"
+                        },
+                        "authorize_person_id": "user id of the person who accepted or changed the member status"
+                    }
+                ],
+                "is_active": "true | false",
+                "is_deleted": "true | false",
+                "is_leaved": false,
+                "joined_at": "timestamp",
+                "updated_at": "timestamp",
+                "leave_at": "timestamp | NULL"
+            }
+        ],
+        "is_active": "true | false",
+        "is_deleted": "true | false",
+        "expired_at": "timestamp",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    },
+    "groups": {
+        "name": "",
+        "description": "",
+        "image": "",
+        "created_by": "",
+        "type": "ENUM(Public, Restricted, Stealth)",
+        "members": [
+            {
+                "member_id": "the user id",
+                "roles": [],
+                "is_approved": "true | false",
+                "is_rejected": "true | false",
+                "is_active": "true | false",
+                "is_deleted": "true | false",
+                "joined_at": "timestamp",
+                "updated_at": "timestamp"
+            }
+        ],
+        "is_active": "true | false",
+        "is_deleted": "true | false",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    },
+    "events": {
+        "host_id": "",
+        "community_id": "id | NULL",
+        "group_id": "id | NULL",
+        "category": "ENUM(Community, Group, Personal/Private)",
+        "type": "map from event category",
+        "title": "",
+        "description": "",
+        "image": "",
+        "venue_details": "",
+        "date": {
+            "from": "Date",
+            "to": "Date"
+        },
+        "time": {
+            "from": "Time",
+            "to": "Time"
+        },
+        "invitation_type": "ENUM(Public, Members, Private)",
+        "rsvp_end_time": "timestamp",
+        "rsvp": [
+            {
+                "user_id": "",
+                "status": "ENUM(No-Reply, Attending, Not-Attending, Maybe)",
+                "guests": {
+                    "adults": 1,
+                    "minor": 2,
+                    "total": 3,
+                    "family_members": [
+                        {
+                            "user_id": "",
+                            "name": "",
+                            "relation": ""
+                        }
+                    ]
+                },
+                "created_at": "timestamp",
+                "updated_at": "timestamp"
+            }
+        ],
+        "attendees": {
+            "is_restricted": false,
+            "number_of_max_attendees": 10,
+            "additional_guests": true,
+            "number_of_max_guests": 10
+        },
+        "attendees_list_visibility": "Host/Public",
+        "media_upload_by_attendees": true,
+        "event_images": [
+            {
+                "image_name": "",
+                "url": "",
+                "user_id": "",
+                "uploaded_at": "timestamp",
+                "is_deleted": false,
+                "is_active": true
+            }
+        ],
+        "is_active": "true | false",
+        "is_deleted": "true | false",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    },
+    "announcements": {
+        "user_id": "who created this announcement",
+        "title": "",
+        "description": "",
+        "end_date": "timestamp",
+        "to_whom": "ENUM(Public,Member)",
+        "is_active": "true | false",
+        "is_deleted": "true | false",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    },
+    "roles": [
+        {
+            "name": "Board Member",
+            "slug": "board_member"
+        },
+        {
+            "name": "Executive Member",
+            "slug": "executive_member"
+        },
+        {
+            "name": "Member",
+            "slug": "member"
+        },
+        {
+            "name": "Fan",
+            "slug": "fan"
+        },
+        {
+            "name": "User",
+            "slug": "user"
+        }
+    ],
+    "permissions": [
+        {
+            "resource_id": "id of the resource collection document",
+            "role_id": "role collection doc id",
+            "permissions": [
+                "CREATE",
+                "EDIT",
+                "VIEW",
+                "DELETE"
+            ]
+        },
+        {
+            "resource_id": "id of the resource collection document",
+            "role_id": "role collection doc id",
+            "permissions": [
+                "VIEW"
+            ]
+        }
+    ],
+    "resources": [
+        {
+            "name": "community",
+            "status": true
+        },
+        {
+            "name": "groups",
+            "status": true
+        },
+        {
+            "name": "events",
+            "status": true
+        },
+        {
+            "name": "members",
+            "status": true
+        },
+        {
+            "name": "fans",
+            "status": true
+        },
+        {
+            "name": "announcements",
+            "status": true
+        },
+        {
+            "name": "maps",
+            "status": true
+        },
+        {
+            "name": "settings",
+            "status": true
+        }
+    ],
+    "notifications": [
+        {
+            "user_id": "",
+            "purpose": "",
+            "type": "ENUM(SMS, EMAIL, PUSH)",
+            "content": {
+                "title": "",
+                "body": ""
+            },
+            "is_send": false,
+            "retried_count": 2,
+            "send_at": "timestamp",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
+    ],
+    "settings": [
+        {
+            "key": "grace_period",
+            "value": 15,
+            "comment": "Grace period for sending the expiration alert to the community owner.",
+            "label": "Send Expiry Alert"
+        }
+    ],
+    "metadata": [
+        {
+            "type": "community",
+            "purpose": [
+                {
+                    "type": "category",
+                    "values": [
+                        {
+                            "language": "en",
+                            "values": [
+                                "Social",
+                                "Cultural",
+                                "Religious",
+                                "Others"
+                            ]
+                        },
+                        {
+                            "language": "bn",
+                            "values": [
+                                "かいしゃ",
+                                "おにーちゃ",
+                                "Religious",
+                                "Others"
+                            ]
+                        },
+                        {
+                            "language": "hi",
+                            "values": [
+                                "Social",
+                                "Cultural",
+                                "Religious",
+                                "Others"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "members",
+            "purpose": [
+                {
+                    "type": "promotion_status",
+                    "values": [
+                        {
+                            "language": "en",
+                            "values": [
+                                "Pending",
+                                "Approved",
+                                "Rejected",
+                                "Completed"
+                            ]
+                        },
+                        {
+                            "language": "bn",
+                            "values": [
+                                "Pending",
+                                "Approved",
+                                "Rejected",
+                                "Completed"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "groups",
+            "purpose": [
+                {
+                    "type": "group_type",
+                    "values": [
+                        {
+                            "language": "en",
+                            "values": [
+                                "Open For All",
+                                "Restricted",
+                                "Stealth"
+                            ]
+                        },
+                        {
+                            "language": "bn",
+                            "values": [
+                                "Open For All",
+                                "Restricted",
+                                "Stealth"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "events",
+            "purpose": [
+                {
+                    "type": "events_category",
+                    "values": [
+                        {
+                            "language": "en",
+                            "values": [
+                                "Community",
+                                "Group",
+                                "Private"
+                            ]
+                        },
+                        {
+                            "language": "bn",
+                            "values": [
+                                "Community",
+                                "Group",
+                                "Private"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "events_type_community",
+                    "values": [
+                        {
+                            "language": "en",
+                            "values": [
+                                "Religious",
+                                "Educational",
+                                "Community Service",
+                                "Fundraising",
+                                "Cultural",
+                                "Social",
+                                "Outdoor Social",
+                                "Member Meeting",
+                                "Executive Meeting",
+                                "Board Meeting",
+                                "Celebration",
+                                "Other"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "event_type_private",
+                    "values": [
+                        {
+                            "language": "en",
+                            "values": [
+                                "Religious",
+                                "Cultural",
+                                "Social",
+                                "Outdoor Social",
+                                "Celebration",
+                                "Other"
+                            ]
+                        },
+                        {
+                            "language": "bn",
+                            "values": [
+                                "Religious",
+                                "Cultural",
+                                "Social",
+                                "Outdoor Social",
+                                "Celebration",
+                                "Other"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "invitation_type",
+            "values": [
+                {
+                    "language": "en",
+                    "values": [
+                        "For All",
+                        "Community Members Only",
+                        "Private Contacts Only"
+                    ]
+                },
+                {
+                    "language": "bn",
+                    "values": [
+                        "For All",
+                        "Community Members Only",
+                        "Private Contacts Only"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "rsvp",
+            "purpose": [
+                {
+                    "type": "rsvp_status",
+                    "values": [
+                        {
+                            "language": "en",
+                            "values": [
+                                "Attending",
+                                "Not Attending",
+                                "Maybe"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "attendees_list",
+            "purpose": [
+                {
+                    "type": "visibility",
+                    "values": [
+                        "Host",
+                        "Public"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "announcement",
+            "purpose": [
+                {
+                    "type": "to_whom",
+                    "values": [
+                        {
+                            "language": "en",
+                            "values": [
+                                "Public To All",
+                                "Member Only"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "notification",
+            "purpose": [
+                {
+                    "type": "type",
+                    "values": [
+                        "SMS",
+                        "EMAIL",
+                        "PUSH"
+                    ]
+                }
+            ]
+        }
+    ],
+    "countries": [
+        {
+            "country": "Afghanistan",
+            "code": "AF",
+            "phone_code": "+1",
+            "states": [
+                "Badakhshan",
+                "Badghis",
+                "Baghlan",
+                "Balkh",
+                "Bamian",
+                "Daykondi",
+                "Farah",
+                "Faryab",
+                "Ghazni",
+                "Ghowr",
+                "Helmand",
+                "Herat",
+                "Jowzjan",
+                "Kabul",
+                "Kandahar",
+                "Kapisa",
+                "Khost",
+                "Konar",
+                "Kondoz",
+                "Laghman",
+                "Lowgar",
+                "Nangarhar",
+                "Nimruz",
+                "Nurestan",
+                "Oruzgan",
+                "Paktia",
+                "Paktika",
+                "Panjshir",
+                "Parvan",
+                "Samangan",
+                "Sar-e Pol",
+                "Takhar",
+                "Vardak",
+                "Zabol"
+            ]
+        }
+    ]
+}

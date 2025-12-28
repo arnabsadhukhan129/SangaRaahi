@@ -1,0 +1,104 @@
+<div class="login-container">
+  <div class="login-box">
+      <div class="login-logo">
+          <img src="/assets/images/logo-white.png" alt="logo">
+      </div>
+      <mat-card class="logform_matCard_block">
+          <mat-card-content>
+
+            <mat-card-content>
+              <form [formGroup]="confirmOtp" (ngSubmit)="submitOtp()" autocomplete="off">
+                  <div class="mat-title">Please Enter your OTP</div>
+                  <p>
+                      <mat-form-field>
+                          <mat-label> OTP: </mat-label>
+                          <input matInput type="number" formControlName="otp" (keypress)="numericOnly($event)" (keydown.space)="$event.preventDefault()">
+                          <mat-error *ngIf="confirmOtp.get('otp')!.hasError('required')"> OTP is Required </mat-error>
+                          <mat-error *ngIf="confirmOtp.get('otp')!.hasError('min')"> OTP must be contain 6 digits</mat-error>
+                      </mat-form-field>
+                  </p>
+                  <button mat-raised-button color="accent" type="submit" [disabled]="!confirmOtp.valid">Submit</button>
+              </form>
+            </mat-card-content>
+            <!-- <div class="mat-subheading-2"><button mat-raised-button color="basic" (click)="resendOtp()">Resend OTP</button></div> -->
+
+
+<!--
+              <form [formGroup]="login" (ngSubmit)="submit()" autocomplete="off">
+                  <div class="mat-title">Sign In</div>
+                  <p>
+                      <mat-form-field>
+                          <mat-label> Email: </mat-label>
+                          <input matInput type="email" formControlName="username">
+                          <mat-error *ngIf="login.get('username')!.hasError('required')">
+                              Username is Required
+                          </mat-error>
+                          <mat-error *ngIf="login.get('username')!.hasError('email')">
+                              Invalid E-Mail
+                              Pattern</mat-error>
+                      </mat-form-field>
+                  </p>
+                  <p>
+                      <mat-form-field>
+                          <mat-label> Password: </mat-label>
+                          <input matInput type="password" formControlName="password">
+
+                          <mat-error *ngIf="login.get('password')!.hasError('required')">
+                              Password is Required
+                          </mat-error>
+                          <mat-error *ngIf="login.get('password')!.errors">Password should be minimum of 6 characters
+                          </mat-error>
+                      </mat-form-field>
+                  </p>
+                  <br>
+                  <div class="captcha login_captcha">
+
+                      <re-captcha formControlName="recaptchaReactive"></re-captcha>
+                  </div>
+                  <button mat-raised-button color="accent" type="submit" [disabled]="!login.valid">Login</button>
+              </form>
+ -->
+
+
+          </mat-card-content>
+          <div class="log_form_bottom">
+            <!-- <a class="mat-subheading-2" routerLink="/auth/forget-password">Forgot Password</a> -->
+            <a class="mat-subheading-2" (click)="resendOtp()">Resend OTP</a>
+            <!-- <div class="mat-subheading-2" >
+              <button class="button_appearance_none" (click)="resendOtp()">Resend OTP</button>
+            </div> -->
+          </div>
+
+      </mat-card>
+
+
+
+  </div>
+</div>
+
+<!--
+
+<div class="login_page_login_page_bg">
+    <div class="login_page_logo_sec">
+        <img src="/assets/images/logo_color_box.png" alt="logo">
+    </div>
+    <mat-card class="logform_matCard_block">
+        <mat-card-content>
+            <form [formGroup]="confirmOtp" (ngSubmit)="submit()" autocomplete="off">
+                <div class="mat-title">Please Enter your OTP</div>
+                <p>
+                    <mat-form-field>
+                        <mat-label> OTP: </mat-label>
+                        <input matInput type="number" formControlName="otp" (keypress)="numericOnly($event)" (keydown.space)="$event.preventDefault()">
+                        <mat-error *ngIf="confirmOtp.get('otp')!.hasError('required')"> OTP is Required </mat-error>
+                        <mat-error *ngIf="confirmOtp.get('otp')!.hasError('min')"> OTP must be contain 6 digits</mat-error>
+                    </mat-form-field>
+                </p>
+                <button mat-raised-button color="accent" type="submit" [disabled]="!confirmOtp.valid">Submit</button>
+            </form>
+        </mat-card-content>
+        <div class="mat-subheading-2"><button mat-raised-button color="basic" (click)="resendOtp()">Resend OTP</button></div>
+    </mat-card>
+</div>
+
+ -->

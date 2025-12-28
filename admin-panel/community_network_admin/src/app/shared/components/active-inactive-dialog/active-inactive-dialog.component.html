@@ -1,0 +1,32 @@
+<div class="modal_block">
+  <div class="modal_close" mat-button (click)="onNoBtnClick()">
+    <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+  </div>
+  <div class="modal_header">
+    <h2>{{data.dialogTitle}}</h2>
+  </div>
+  <div class="modal_body">
+
+    <div mat-dialog-content>
+      <p>Are you sure to {{data.actionName}} the {{data.contentName}} ?</p>
+    </div>
+
+  </div>
+
+  <div class="modal_bottom">
+    <button mat-button class="button_appearance_none modal_btn modal_btn_pink" (click)="onNoBtnClick()">No</button>
+    <button mat-button class="button_appearance_none modal_btn modal_btn_yellow" color="primary" (click)="onYesClick()" cdkFocusInitial>Yes</button>
+  </div>
+
+</div>
+<!--
+
+<button class="close" mat-button (click)="onNoBtnClick()">X</button>
+<h1 mat-dialog-title>{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+  <p>Are you sure to {{data.actionName}} the {{data.contentName}} ?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoBtnClick()">No</button>
+  <button mat-button color="primary" (click)="onYesClick()" cdkFocusInitial>Yes</button>
+</div> -->

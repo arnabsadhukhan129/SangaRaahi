@@ -1,0 +1,124 @@
+
+<mat-card class="matCard_block">
+    <mat-card-content>
+        <form [formGroup]="createGroup" (ngSubmit)="submit()" autocomplete="off" (keydown.enter)="$event.preventDefault()">
+            <div class="mat-title"><h1>Add Group</h1></div>
+            <div class="mat_form_box">
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Select Community</mat-label>
+                        <mat-select required formControlName="communityId">
+                            <mat-option *ngFor="let element of communities;" [value]="element.id">{{ element.communityName }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="createGroup.get('communityId')!.hasError('required')"> Community Type is Required </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Group Type</mat-label>
+                        <mat-select required formControlName="groupType">
+                            <mat-option value="Public">Public</mat-option>
+                            <mat-option value="Restricted">Restricted</mat-option>
+                            <mat-option value="Stealth">Stealth</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="createGroup.get('groupType')!.hasError('required')"> Group Type is Required </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Group Name: </mat-label>
+                        <input matInput type="text" formControlName="name">
+                        <mat-error *ngIf="createGroup.get('name')!.hasError('required')">
+                            Group name is Required
+                        </mat-error>
+                        <mat-error *ngIf="createGroup.get('name')!.hasError('cannotContainSpace')">
+                            Group Name cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field class="mat_textarea_adjust" appearance="fill">
+                        <mat-label>Group Description</mat-label>
+                        <textarea formControlName="description" class="textarea_mat" matInput></textarea>
+                        <mat-error *ngIf="createGroup.get('description')!.hasError('required')"> Group Description is Required </mat-error>
+                        <mat-error *ngIf="createGroup.get('description')!.hasError('cannotContainSpace')">
+                            Community description cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mat_form_row form_fileup_row">
+              <div class="fileup_img_block">
+                <img class="fileup_img" src="{{image}}" width="70px" height="70px" alt="Avatar" style="float: left;"/>
+              </div>
+              <mat-form-field class="mat_img_up">
+                  <div>
+                      <mat-toolbar>
+                      <!-- Display files names -->
+                      <input matInput placeholder="Choose Group Image" readonly type="text" name="imageName" />
+                      <!-- Browse Button -->
+                      <button mat-flat-button color="primary">Browse File</button>
+                      </mat-toolbar>
+                      <!-- Fetch selected filed on change -->
+                      <input
+                      type="file"
+                      #fileInput
+                      id="uploadFile"
+                      (change)="uploadFileToS3Bucket($event)"
+                      name="uploadFile"
+                      multiple="multiple"
+                      accept="image/*"
+                      />
+                  </div>
+              </mat-form-field>
+            </div>
+<!--
+
+            <p>
+                <mat-form-field appearance="fill" >
+                    <mat-label>Select Community</mat-label>
+                    <mat-select required formControlName="communityId">
+                        <mat-option *ngFor="let element of communities;" [value]="element.id">{{ element.communityName }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="createGroup.get('communityId')!.hasError('required')"> Community Type is Required </mat-error>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field>
+                    <mat-label> Group Name: </mat-label>
+                    <input matInput type="text" formControlName="name">
+                    <mat-error *ngIf="createGroup.get('name')!.hasError('required')">
+                        Group name is Required
+                    </mat-error>
+                    <mat-error *ngIf="createGroup.get('name')!.hasError('cannotContainSpace')">
+                        Group Name cannot contain whitespace
+                    </mat-error>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>Group Description</mat-label>
+                    <textarea formControlName="description" matInput></textarea>
+                    <mat-error *ngIf="createGroup.get('description')!.hasError('required')"> Group Description is Required </mat-error>
+                    <mat-error *ngIf="createGroup.get('description')!.hasError('cannotContainSpace')">
+                        Community description cannot contain whitespace
+                    </mat-error>
+                </mat-form-field>
+            </p>
+ -->
+
+
+<!--          <p>-->
+<!--&lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--&lt;!&ndash;              <mat-label>Image</mat-label>&ndash;&gt;-->
+<!--              <input type="file" name="group-image" (change)="onFileSelect($event)"/>-->
+<!--&lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--          </p>-->
+
+
+            <div class="mat_form_button_sec">
+                <button class="formBtn_layout" mat-raised-button color="accent" type="submit" [disabled]="!createGroup.valid">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,36 @@
+mat-card {
+    max-width: 900px;
+    margin: 7em auto;
+    text-align: center;
+  }
+  
+  mat-form-field,mat-radio-group {
+    display: block;
+  }
+
+  mat-radio-button {
+    padding: 10px;
+  }
+  
+  mat-card {
+    // max-width: 900px;
+    max-width: 650px;
+    margin: 7em auto;
+    text-align: center;
+    background: #f2f2f2;
+  }
+  
+  .matCard_block {
+    padding: 35px;
+  }
+  
+  .mat-form-field-wrapper {
+    padding: 0 0 10px 0 !important;
+  }
+ 
+  form {
+      font-size: 20px;
+  }
+  
+
+

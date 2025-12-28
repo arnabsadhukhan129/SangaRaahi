@@ -1,0 +1,29 @@
+<div class="modal_block custom_modal notification_modal">
+    <div class="modal_close" mat-button (click)="onYesClick()">
+      <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+    </div>
+    <div class="modal_header">
+      <h2 mat-dialog-title>{{data.dialogTitle}}</h2>
+    </div>
+    <div class="modal_body">
+
+      <div class="modal_body_des">
+        <p>{{data.dialogMessage}}</p>
+      </div>
+
+      <div class="modal_body_list_box">
+        <ng-container *ngFor="let data of notifications">
+          <div class="community_btn_block_modal active ng-star-inserted" style="cursor: pointer;" (click)="redirect()">
+            <span class="modal_switchCommunity_linkLogo">
+              <mat-icon class="header_icon">notifications_none</mat-icon>
+            </span>
+            <span class="notification_name">{{data?.text | truncate: 38}}</span>
+            <span class="switchCommunity_link_dateTime">{{ data?.sentAt ? (data?.sentAt | date:'short') : '' }}</span>
+
+            <!-- <span class="switchCommunity_link_dateTime">22/08/2023 - 18:06</span> -->
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+

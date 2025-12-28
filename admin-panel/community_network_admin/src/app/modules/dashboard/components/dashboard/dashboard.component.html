@@ -1,0 +1,76 @@
+<div [class.dark-theme]="isDark">
+  <!--Header toolbar-->
+  <mat-toolbar [color]="themeColor" class="header_toolbar">
+    <div class="header-top">
+      <div class="left">
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon"
+          (click)="drawer.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <a href="/dashboard" class="title-style">SangaRaahi</a>
+      </div>
+      <div class="right">
+        <div class="profile-name">{{name}}</div>
+        <div class="profile-menu">
+          <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon"
+            [matMenuTriggerFor]="menu">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" class="headr_userMenu">
+            <!-- <button mat-menu-item>Profile</button> -->
+            <a href="/dashboard/profile" mat-menu-item>Profile</a>
+            <!-- <mat-divider></mat-divider> -->
+            <!-- <button mat-menu-item>Logout</button> -->
+          </mat-menu>
+        </div>
+        <div class="header_btn header_notification">
+          <button class="button_appearance_none notification_btn" (click)="notificationModal()">
+            <mat-icon class="header_icon">notifications_active</mat-icon>
+          </button>
+          <span class="notification_btn_red_dot" *ngIf="hasNewNotifications"></span>
+          <!-- <span class="notification_btn_red_dot" ></span> -->
+        </div>
+        <div class="logout-btn">
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <mat-icon (click)="logout()">logout</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+  </mat-toolbar>
+  <!--Header toolbar end-->
+
+  <!--Side Nav-->
+  <mat-drawer-container class="example-container">
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <mat-nav-list class="mat_nav_list">
+        <app-menu-list-item *ngFor="let item of navItems" [item]="item" class="app_menu_list_item"></app-menu-list-item>
+      </mat-nav-list>
+
+      <!-- <mat-selection-list #menu [multiple]="false">
+        <mat-list-option *ngFor="let menu of menus" [value]="menu">
+          {{menu}}
+          <mat-divider></mat-divider>
+        </mat-list-option>
+      </mat-selection-list> -->
+    </mat-drawer>
+    <div class="example-sidenav-content">
+      <div>
+        <!-- Main Router -->
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+
+  </mat-drawer-container>
+  <!--Side nav end-->
+
+</div>
+
+<app-notification (sendMessage)="getMessage($event)"></app-notification>

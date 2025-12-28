@@ -1,0 +1,38 @@
+<div class="modal_block">
+  <div class="modal_close" (click)="closeDialog()">
+    <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+  </div>
+  <div class="modal_header">
+    <!-- <h2>{{data.type}}</h2> -->
+  </div>
+  <div class="modal_body">
+        <div *ngIf="(data.type=='orgQrcodeImage');
+                then imageDiv
+                else otherDiv">
+        </div>
+
+        <ng-template #imageDiv>
+          <div class="modal_body_img">
+            <img [src]="data.content.orgQrcodeImage" *ngIf="data.content && data.content.orgQrcodeImage!='' && data.content.orgQrcodeImage!='null'">
+            <div *ngIf="data.content==undefined || !data.content.orgQrcodeImage || data.content.orgQrcodeImage=='' || data.content.orgQrcodeImage==null">No QR Logo Available</div>
+          </div>
+        </ng-template>
+
+        <ng-template #otherDiv>
+          <div class="modal_body_des">
+            <div *ngIf="data.type == 'orgAuthorityName' ">{{(data.content!=undefined && data.content.orgAuthorityName && data.content.orgAuthorityName!='' && data.content.orgAuthorityName!=null) ? data.content.orgAuthorityName : 'No Data Available' }}</div>
+            <div *ngIf="data.type == 'orgLink' ">{{(data.content!=undefined && data.content.orgLink && data.content.orgLink!='' && data.content.orgLink!=null) ? data.content.orgLink : 'No Data Available' }}</div>
+            <div *ngIf="data.type == 'orgPaymentDescription' ">{{(data.content!=undefined && data.content.orgPaymentDescription && data.content.orgPaymentDescription!='' && data.content.orgPaymentDescription!=null) ? data.content.orgPaymentDescription : 'No Data Available' }}</div>
+           
+          </div>
+        </ng-template>
+
+  </div>
+  <!--
+  <div class="modal_bottom">
+    <button mat-button class="button_appearance_none modal_btn modal_btn_pink" (click)="">Reject</button>
+    <button mat-button class="button_appearance_none modal_btn modal_btn_yellow" (click)="" >Approve</button>
+  </div>
+   -->
+</div>
+

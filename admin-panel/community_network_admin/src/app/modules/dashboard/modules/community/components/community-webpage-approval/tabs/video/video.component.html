@@ -1,0 +1,26 @@
+<div class="tab-box">
+    <h3>Change list for Video Listing Page</h3>
+    <div class="content-list">
+
+        <div class="content-row" *ngFor="let list of approvalList; let i=index">
+            <div class="txt">The {{list.fieldname}} has been changed</div>
+            <div class="action">
+                <button mat-button (click)="openDialog(i)"><span class="btn-search"></span></button>
+                <mat-slide-toggle [checked]="list.isApproved" (click)="updateApprovalStatus(list.isApproved, list.id, i, list.fieldname)"></mat-slide-toggle>
+            </div>
+        </div>
+
+        <div class="content-row" *ngIf="approvalList.length == 0">
+            <div class="txt">No data has been changed.</div>
+        </div>
+
+    </div>
+</div>
+
+<div class="setting-btn">
+
+    <button mat-button class="btn-red" [routerLink]="['/dashboard/community']">Cancel</button>
+    <button mat-button class="btn-orange" [routerLink]="['/dashboard/community']">Save Changes</button>
+    <button mat-button class="btn-green" (click)="goNext()">Save Changes & Next</button>
+
+</div>
