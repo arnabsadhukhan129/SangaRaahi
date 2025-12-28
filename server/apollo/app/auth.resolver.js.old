@@ -1,0 +1,212 @@
+const Services = require('../services');
+const ErrorModules = require('../errors');
+module.exports = {
+    Query: {},
+    Mutation: {
+        // Admin Authentication start
+        async adminLogin(root, args, context, info) {
+            const AuthService = Services.AuthService;
+            const data = args.data;
+            if (Lib.isEmpty(data.email)) {
+                throw new ErrorModules.ValidationError(context.req.__("fieldEmailRequired"));
+            }
+            if (Lib.isEmpty(data.password)) {
+                throw new ErrorModules.ValidationError(context.req.__("fieldPasswordRequired"));
+            }
+            const admin = await AuthService.adminLogin(data);
+            if (admin.error) {
+                throw new ErrorModules.GeneralApiError(Lib.translate(admin.message));
+            }
+            let user = Lib.generalizeUser(Lib.omitKeysFromObject(admin.data.user, ["password", "family_members", "hobbies", "area_of_work:", "profession", "_v", "about_yourself", "is_delete", "code"]));
+            // user = Lib.recostructObjectKeys(user);
+            const authentication = await Services.AuthService.createAuthentication('', user);
+            const access_token = Lib.generateAccessToken(user, false, '7d');
+            const refresh_token = Lib.generateRefreshToken(user, false, '10d');
+            return Lib.resSuccess('', {
+                token: {
+                    accessToken: access_token,
+                    refreshToken: refresh_token
+                },
+                user:user
+            })
+        },
+        // End user authentication start
+        async registerByPhone(root, args, context, info) {
+            const data = args.data;
+            if (Lib.isEmpty(data)) {
+                throw new ErrorModules.ValidationError("No user data provided.");
+            }
+            const result = await Services.AuthService.registerByPhone(data);
+            if (!result.error) {
+                let user = result.data.user;
+                const otp = result.data.otp;
+                user = /*Lib.generalizeUser*/(Lib.omitKeysFromObject(user, ["hobbies", "area_of_work", "profession", "is_deleted", "family_members", "_v", "code"]));
+                if(result.login) {
+                    user = Lib.generalizeUser(user);
+                }
+                // TODO call the notification service to send the otp to the user end
+                let accessExpiresIn = result.login ? "1d" : "5m";
+                let refreshExpiresIn = result.login ? "7d" : "15m";
+                // The following flag will be required when the client try to hit the api of user details instead of the verify otp
+                user.login = result.login;
+                if(result.login) {
+                    user.cause = Lib.getEnum("OTP_CAUSE._login");
+                }
+                const accessToken = Lib.generateAccessToken(user, result.login, accessExpiresIn);
+                const refreshToken = Lib.generateRefreshToken(user, result.login, refreshExpiresIn);
+                return Lib.resSuccess('', {
+                    token: {
+                        accessToken: accessToken, refreshToken: refreshToken
+                    },
+                    phone: user.phone,
+                    login:result.login
+                });
+            } else {
+                // Error occurred
+                throw new result.ErrorClass(result.message);
+            }
+        },
+        async registerUserDetails(root, args, context) {
+            /**
+             * 1. Get the data from the args
+             * 2. Check for the data validation
+             * 3. Call on the service to perform the registration
+             * 4. If any error occurred throw that
+             * 5. Get the OTP and send to the user
+             * 6. Generate a new access token and refresh token for the otp validation
+             * 7. Return to the user call.
+             */
+            const {email, name} = args.data;
+            let user = context.user;
+            if(user.login) {
+                // User has been logged in
+                // So we do not allowed this here
+                throw new ErrorModules.GeneralApiError("Already logged-in");
+            }
+            const result = await Services.AuthService.registerUserDetails({email, name}, user);
+            if (result.error) {
+                throw new ErrorModules.GeneralApiError(result.message);
+            }
+            // The data consist of {otp, phone}
+            const data = result.data;
+            // Use the notification service to send the otp to the user.
+
+            // Generate the tokens
+            user = Lib.generalizeUser(Lib.omitKeysFromObject(data.user, ["hobbies", "area_of_work", "profession", "is_deleted", "family_members", "_v", "code"]));
+            user.cause = Lib.getEnum("OTP_CAUSE._auth");
+            const accessToken = Lib.generateAccessToken(user, true);
+            const refreshToken = Lib.generateRefreshToken(user, true, '15m');
+
+            return Lib.resSuccess('', {
+                token: {
+                    accessToken: accessToken,
+                    refreshToken: refreshToken
+                },
+                user: {
+                    id: user.id,
+                    email: email,
+                    name: name,
+                    phone: data.phone
+                }
+            });
+        },
+
+        async verifyOtp(root, args, context) {
+            const {otp} = args.data;
+            const result = await Services.AuthService.verifyOtp(otp, context.user);
+            if (result.error) {
+                throw new ErrorModules.GeneralApiError(result.message);
+            }
+            // The next step is to add email and name
+            // which must be done in 10 minutes
+            // in case the verify otp comes after the email and password then the expired in parameter should be removed or
+            // made to 1 week
+            const cause = result.data.cause; // This will require in future
+            let user = result.data.user;
+            user = Lib.generalizeUser(user);
+            let userData = context.user;
+            let req = context.req;
+            // Only create authentication when the auth is login or register
+            if([Lib.getEnum('OTP_CAUSE._login'), Lib.getEnum('OTP_CAUSE._auth')].includes(cause)) {
+                await Services.AuthService.createAuthentication(otp, userData,req);
+            }
+            // The validation time will change in the future
+            const access_token = Lib.generateAccessToken(user, false, '1d');
+            const refresh_token = Lib.generateRefreshToken(user, false, '5d');
+            return Lib.resSuccess("", {
+                status: true,
+                causeOfAction:cause,
+                token: {
+                    accessToken: access_token,
+                    refreshToken: refresh_token
+                },
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone
+                    // Rest of the fields are null
+                }
+            });
+        },
+
+        async resendOtp(root, args, context) {
+            let token = args.data.token;
+            token = Lib.decrypt(token);
+            if(Lib.isEmpty(token)) {
+                throw new ErrorModules.ValidationError("noTokenFound");
+            }
+            const jwt = Lib.getModules('jwt');
+            let user = jwt.verify(token, Lib.ENV('REFRESH_TOKEN_SECRET_KEY'));
+            user = Lib.omitKeysFromObject(user, ['iat', 'exp']);
+            const result = await Services.AuthService.resendOtp(user);
+            if(result.error) {
+                throw new ErrorModules.FatalError(result.message);
+            }
+            // Send the otp using the notification service.
+            const accessToken = Lib.generateAccessToken(user);
+            return Lib.resSuccess('', {
+                token: {
+                    accessToken: accessToken,
+                    refreshToken:token
+                },
+                status:true,
+                causeOfAction:user.cause
+            });
+        },
+        /** Admin Change Password **/
+        async adminPasswordChange(root,args,context){
+            let logUser = context.user.id;
+            const adminPassword = await Services.AuthService.adminPasswordChange(logUser,args);
+            if( adminPassword.error ) {
+                throw new ErrorModules.GeneralApiError(Lib.translate(adminPassword.message));
+            }
+            return Lib.resSuccess(adminPassword.message);
+        },
+        /** Admin Forgot Password **/
+        async adminForgotPassword(root,args,context){
+            let email = args.data.email;
+            const forgotPassword = await Services.AuthService.adminForgotPassword(email);
+            if( forgotPassword.error ) {
+                throw new ErrorModules.GeneralApiError(Lib.translate(forgotPassword.message));
+            }
+            return Lib.resSuccess('',{
+                token: forgotPassword.data.token
+            });
+        },
+        /** Admin Forgot Password Reset**/
+        async adminResetPassword(root,args){
+            const resetPassword = await Services.AuthService.adminResetPassword(args);
+            
+            return Lib.resSuccess(resetPassword.message);
+        },
+        async logout(root,args,context) {
+            const logout = await Services.AuthService.logout(context.user);
+            if( logout.error ) {
+                throw new logout.ErrorClass(logout.message);
+            }
+            return Lib.resSuccess(logout.message);
+        }
+
+    }
+}

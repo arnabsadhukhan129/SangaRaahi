@@ -1,0 +1,10 @@
+Youtube link api
+https://www.youtube.com/watch?v=7DpyhKu_dko
+https://www.npmjs.com/package/youtube-info
+
+Vimeo link api
+accesslink - 18aa7b551b3c67d635cce90512e65e35
+https://api.vimeo.com/videos/740443819
+
+http://sangaraahip2.demoyourprojects.com/auth
+

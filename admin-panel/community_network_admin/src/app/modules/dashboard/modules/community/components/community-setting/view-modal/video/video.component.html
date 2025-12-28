@@ -1,0 +1,48 @@
+<div class="modal_block">
+  <div class="modal_close" (click)="closeDialog()">
+    <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+  </div>
+  <div class="modal_header">
+    <!-- <h2>{{video.title}}</h2> -->
+  </div>
+  <div class="modal_body">
+    <div class="modal_body_video">
+      <a class="modal_video_link" href={{data.content.link}} target="_blank">
+        <iframe class="modal_video_iframe pointer_event_none"  [src]="data.content.hlink" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe>
+      </a>
+    </div>
+  </div>
+    <!--
+    <div class="modal_bottom">
+      <button mat-button class="button_appearance_none modal_btn modal_btn_pink" (click)="">Reject</button>
+      <button mat-button class="button_appearance_none modal_btn modal_btn_yellow" (click)="" >Approve</button>
+    </div>
+    -->
+
+</div>
+
+<!--
+<div (click)="closeDialog()">
+    close
+</div>
+
+
+<div>
+
+            <div class="owl_item">
+                        <a href={{data.content.link}} target="_blank">
+                          <div class="owl_item_imgVideo_block">
+                            <iframe class="owl_item_imgVideo_thumb pointer_event_none"  [src]="data.content.hlink" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe>
+                          </div>
+
+
+                        </a>
+            </div>
+
+
+
+
+    <br>
+    <button mat-button class="btn-red" (click)="updateApprovalStatus(false, data.content.id)">Reject</button>
+    <button mat-button class="btn-green" (click)="updateApprovalStatus(true, data.content.id)" >Approve</button>
+</div> -->

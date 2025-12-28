@@ -1,0 +1,52 @@
+
+ mat-card-title {
+    text-align: center;
+}
+mat-card-content{
+    padding: 20px;
+    // padding-left: 400px;
+    text-align: center;
+    font-size: large !important;
+}
+mat-card{
+    width: 100%;
+    height: 100%;
+    display: flow-root;
+}
+
+/*
+.userView_block.userView_block_userDetails {
+    max-width: 750px !important;
+}
+
+.matcard_userDetails_view {
+    box-sizing: border-box;
+
+    display: inline-block;
+    width: 100%;
+    padding: 20px 50px;
+}
+
+*/
+.content {
+    height: 25px;
+    width: 50%;
+    text-align: center;
+    float: left;
+  }
+
+  /*
+  .userView_block.userView_block_userDetails h3.content  {
+    width: 100%;
+    text-align: left;
+    height: auto;
+  }
+
+*/
+
+.advanced-color{
+    color: #3f51b5;
+}
+.beginner-color{
+    color: #f44336;
+}

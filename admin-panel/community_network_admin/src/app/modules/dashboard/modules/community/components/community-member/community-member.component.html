@@ -1,0 +1,181 @@
+<div class="listView_contBg">
+    <mat-tab-group (selectedTabChange)="tabClick($event)">
+        <mat-tab label="Member List">
+            <div class="listion_header_sec">
+              <div class="listing_header_left">
+                  <br>
+                <h2>Members: </h2>
+              </div>
+              <div class="listing_header_right">
+                <div class="search-bar">
+                  <mat-form-field>
+                    <mat-label> Search by member name </mat-label>
+                    <input matInput type="text" #search (keyup)="communityMemberList(search.value)" >
+                  </mat-form-field>
+                  <button class="list_search_btn" mat-raised-button  (click)="communityMemberList(search.value)" ><span
+                    class="icon-search"></span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="listing_table_bg">
+              <div class="table-responsive">
+                <table mat-table [dataSource]="matTableDataSource" class="mat-elevation-z8 new_mat_table">
+
+                  <ng-container matColumnDef="no">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> {{1*10-(9-i)}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Name">
+                    <th mat-header-cell *matHeaderCellDef > Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.members.user.name}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Email">
+                    <th mat-header-cell *matHeaderCellDef > Email </th>
+                    <td mat-cell *matCellDef="let element"> {{element.members.user.email ? element.members.user.email : 'N/A'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Phone">
+                    <th mat-header-cell *matHeaderCellDef> Phone </th>
+                    <td mat-cell *matCellDef="let element"> {{element.members.user.phone ? element.members.user.phone : 'N/A'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Image">
+                      <th mat-header-cell *matHeaderCellDef> Image </th>
+                      <td mat-cell *matCellDef="let element">
+                          <div *ngIf="element.members.user.profileImage == '' || element.members.user.profileImage ==null;then img_content else img_other_content">here is ignored</div>
+                          <ng-template #img_content>
+                            <div class="table_td_img_block">
+                              <img class="td_img" src="https://www.plslwd.org/wp-content/plugins/lightbox/images/No-image-found.jpg" width="50px" height="50px"/>
+                            </div>
+                          </ng-template>
+                          <ng-template #img_other_content>
+                            <div class="table_td_img_block">
+                              <img class="td_img" [src]="element.members.user.profileImage" width="50px" height="50px"/>
+                            </div>
+                          </ng-template>
+                      </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Role">
+                      <th mat-header-cell *matHeaderCellDef> Role </th>
+                      <td mat-cell *matCellDef="let element"> {{element.members.roles}} </td>
+                    </ng-container>
+              <div *ngIf="userRole === 'board_member' || userRole === 'executive_member'">
+                <ng-container matColumnDef="Actions">
+                  <th mat-header-cell *matHeaderCellDef> Actions </th>
+                  <td mat-cell *matCellDef="let element; let i = index">
+                    <div class="td_action_btn">
+                        <button
+                      class="promotDemote_btn"
+                        mat-icon-button
+                        matTooltip="Promote/Demote"
+                        (click)=select.open()>
+
+                        <mat-icon>import_export</mat-icon>
+
+                        <mat-select
+                          #select
+                          class="langSelect">
+                          <mat-option (click)="PromoteOrDemoteCommunityMember(element.members.user.id,element.id,i,true)">Promote</mat-option>
+                          <mat-option (click)="PromoteOrDemoteCommunityMember(element.members.user.id,element.id,i,false)">Demote</mat-option>
+                        </mat-select>
+                        </button>
+
+                        <span *ngIf="element.members.roles !== 'Board Member'">
+                          <button mat-icon-button color="warn" aria-label="Example icon button with a home icon" class=" mat-focus-indicator btn-red mat-icon-button mat-button-base mat-warn">
+                            <mat-icon (click)="removeCommunityMember(element.members.user.id,element.id, i)">delete</mat-icon>
+                          </button>
+                        </span>
+                    </div>
+                  </td>
+                </ng-container>
+              </div>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+              <div class="table_no_record"  *ngIf="total === 0">No records found</div>
+            </div>
+
+              <!-- <ng-template [ngIf]="total !== 0">
+              <div class="list_pagination">
+                <app-pagination [current]="current" [total]="total" (goTo)="onGoTo($event)" (next)="onNext($event)" (previous)="onPrevious($event)"></app-pagination>
+              </div>
+            </ng-template> -->
+        </mat-tab>
+        <mat-tab label="Request List">
+            <div class="listion_header_sec">
+                <div class="listing_header_left">
+                    <br>
+                  <h2>Requested Members: </h2>
+                </div>
+                <div class="listing_header_right">
+                  <div class="search-bar">
+                    <mat-form-field>
+                      <mat-label> Search by member name </mat-label>
+                      <input matInput type="text" #searchreq  (keyup)="communityRequestList(1,searchreq.value)">
+                    </mat-form-field>
+                    <button class="list_search_btn" mat-raised-button (click)="communityRequestList(1,searchreq.value)" ><span
+                      class="icon-search"></span></button>
+                  </div>
+                </div>
+            </div>
+
+            <div class="listing_table_bg">
+              <div class="table-responsive">
+                <table mat-table [dataSource]="matRequestTableDataSource" class="mat-elevation-z8 new_mat_table">
+
+                  <ng-container matColumnDef="no">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element; let i = index;"> {{1*10-(9-i)}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Name">
+                    <th mat-header-cell *matHeaderCellDef > Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.members.user.name}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="RequestedDate">
+                    <th mat-header-cell *matHeaderCellDef> Requested Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.members.joinedAt ? element.members.joinedAt : 'N/A'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="Image">
+                      <th mat-header-cell *matHeaderCellDef> Image </th>
+                      <td mat-cell *matCellDef="let element">
+                          <div *ngIf="element.members.user.profileImage == '' || element.members.user.profileImage == null;then img_content else img_other_content">here is ignored</div>
+                          <ng-template #img_content><img src="https://www.plslwd.org/wp-content/plugins/lightbox/images/No-image-found.jpg" width="50px" height="50px"/> </ng-template>
+                          <ng-template #img_other_content><img [src]="element.members.user.profileImage" width="50px" height="50px"/> </ng-template>
+                      </td>
+                  </ng-container>
+                  <ng-container matColumnDef="RequestedRole">
+                    <th mat-header-cell *matHeaderCellDef> Requested Role </th>
+                    <td mat-cell *matCellDef="let element"> {{element.members.memberPromotions && element.members.memberPromotions.path ? element.members.memberPromotions.path.to : 'N/A'}} </td>
+                  </ng-container>
+              <div *ngIf="userRole === 'board_member' || userRole === 'executive_member'">
+                <ng-container matColumnDef="Actions">
+                  <th mat-header-cell *matHeaderCellDef> Actions </th>
+                  <td mat-cell *matCellDef="let element; let i = index">
+                    <button mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                        <mat-icon (click)="approveOrRejectMemberRequest(element.members.user.id,element.id, i, true)">done_outline</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" aria-label="Example icon button with a home icon">
+                        <mat-icon (click)="approveOrRejectMemberRequest(element.members.user.id,element.id, i, false)">disabled_by_default</mat-icon>
+                      </button>
+                  </td>
+                </ng-container>
+              </div>
+                  <tr mat-header-row *matHeaderRowDef="displayedRequestColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedRequestColumns;"></tr>
+                </table>
+              </div>
+              <div class="table_no_record" *ngIf="reqtotal === 0">No records found</div>
+            </div>
+              <ng-template [ngIf]="reqtotal !== 0">
+              <div class="list_pagination">
+                <app-pagination [current]="current" [total]="reqtotal" (goTo)="onGoTo($event)" (next)="onNext($event)" (previous)="onPrevious($event)"></app-pagination>
+              </div>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+

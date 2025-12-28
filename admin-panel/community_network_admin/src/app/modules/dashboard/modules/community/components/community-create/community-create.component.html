@@ -1,0 +1,169 @@
+<mat-card class="matCard_block">
+    <mat-card-content>
+        <form [formGroup]="createCommunity" (ngSubmit)="submit()" autocomplete="off" (keydown.enter)="$event.preventDefault()">
+            <div class="mat-title"><h1>Add Community</h1></div>
+            <div class="mat_form_box">
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Community Type</mat-label>
+                        <mat-select required formControlName="communityType">
+                            <mat-option value="Social">Social</mat-option>
+                            <mat-option value="Cultural">Cultural</mat-option>
+                            <mat-option value="Religious">Religious</mat-option>
+                            <mat-option value="Others">Others</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="createCommunity.get('communityType')!.hasError('required')"> Community Type is Required </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Community Name: </mat-label>
+                        <input matInput type="text" formControlName="communityName">
+                        <mat-error *ngIf="createCommunity.get('communityName')!.hasError('required')">
+                            Community name is Required
+                        </mat-error>
+                        <mat-error *ngIf="createCommunity.get('communityName')!.hasError('cannotContainSpace')">
+                            Community Name cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mat_form_row form_fileup_row">
+                  <div class="fileup_img_block">
+                    <img class="fileup_img" src="{{image}}" width="70px" height="70px" alt="Image Up" style="float: left;"/>
+                  </div>
+                  <!-- <img class="form_fileup_img" src="{{image}}" width="70px" height="70px" alt="Avatar" style="float: left;"/> -->
+                  <mat-form-field class="mat_img_up">
+                      <div>
+                          <mat-toolbar>
+                          <!-- Display files names -->
+                          <input matInput placeholder="Choose Community Banner Image" readonly type="text" name="imageName" />
+                          <!-- Browse Button -->
+                          <button mat-flat-button color="primary">Browse File</button>
+                          </mat-toolbar>
+                          <!-- Fetch selected filed on change -->
+                          <input
+                          type="file"
+                          #fileInput
+                          id="uploadFile"
+                          (change)="uploadFileToS3Bucket($event)"
+                          name="uploadFile"
+                          multiple="multiple"
+                          accept="image/*"
+                          />
+                      </div>
+                  </mat-form-field>
+                </div>
+                <!-- <p>
+                    <mat-form-field>
+                        <mat-label> Community Location: </mat-label>
+                        <input matInput type="text" formControlName="communityLocation">
+                        <mat-error *ngIf="createCommunity.get('communityLocation')!.hasError('required')"> Community location is Required </mat-error>
+                        <mat-error *ngIf="createCommunity.get('communityLocation')!.hasError('cannotContainSpace')">
+                            Community Location cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </p> -->
+                <div class="mat_form_row">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Community Description</mat-label>
+                        <textarea class="textarea_mat" formControlName="communityDescription" matInput></textarea>
+                        <mat-error *ngIf="createCommunity.get('communityDescription')!.hasError('required')"> Community Description is Required </mat-error>
+                        <mat-error *ngIf="createCommunity.get('communityDescription')!.hasError('cannotContainSpace')">
+                            Community Description cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Address Line 1: </mat-label>
+                        <input matInput type="text" formControlName="firstAddressLine">
+                        <mat-error *ngIf="createCommunity.get('firstAddressLine')!.hasError('required')"> Address Line 1 is Required </mat-error>
+                        <mat-error *ngIf="createCommunity.get('firstAddressLine')!.hasError('cannotContainSpace')">
+                            Address Line 1 cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Address Line 2: </mat-label>
+                        <input matInput type="text" formControlName="secondAddressLine">
+                        <!-- <mat-error *ngIf="createCommunity.get('secondAddressLine')!.hasError('required')"> Address Line 2 is Required </mat-error> -->
+                        <mat-error *ngIf="createCommunity.get('secondAddressLine')!.hasError('cannotContainSpace')">
+                            Address Line 2 cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> City : </mat-label>
+                        <input matInput type="text" formControlName="city">
+                        <mat-error *ngIf="createCommunity.get('city')!.hasError('required')"> City is Required </mat-error>
+                        <mat-error *ngIf="createCommunity.get('city')!.hasError('cannotContainSpace')">
+                            City cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> State : </mat-label>
+                        <input matInput type="text" formControlName="state">
+                        <mat-error *ngIf="createCommunity.get('state')!.hasError('required')"> State is Required </mat-error>
+                        <mat-error *ngIf="createCommunity.get('state')!.hasError('cannotContainSpace')">
+                            state cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Country : </mat-label>
+                        <input matInput type="text" formControlName="country">
+                        <mat-error *ngIf="createCommunity.get('country')!.hasError('required')"> Country is Required </mat-error>
+                        <mat-error *ngIf="createCommunity.get('country')!.hasError('cannotContainSpace')">
+                            Country cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Zipcode : </mat-label>
+                        <input matInput type="text" formControlName="zipcode">
+                        <!-- <mat-error *ngIf="createCommunity.get('zipcode')!.hasError('required')"> Zipcode is Required </mat-error> -->
+                        <mat-error *ngIf="createCommunity.get('zipcode')!.hasError('cannotContainSpace')">
+                            Zipcode cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="mat_form_row">
+                    <div class="mat_form_radio_block">
+                        <h5> Is this organization a legal Non-Profit * : </h5>
+                        <div class="mat_form_radio_block_right">
+                            <mat-radio-group aria-label="Select an option" formControlName="nonProfit">
+                                <mat-radio-button value="1" (click)="profitIdDisable(false)">Yes</mat-radio-button>
+                                <mat-radio-button value="0" (click)="profitIdDisable(true)">No</mat-radio-button>
+                            </mat-radio-group>
+                            <mat-error *ngIf="createCommunity.get('nonProfit')!.hasError('required') && createCommunity.get('nonProfit')?.touched"> Non Profit Field is Required </mat-error>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Non Profit Tax Id : </mat-label>
+                        <input matInput type="text" formControlName="nonProfitTaxId">
+                        <!-- <mat-error *ngIf="createCommunity.get('nonProfitTaxId')!.hasError('required')"> Non Profit Tax Id is Required </mat-error> -->
+                        <mat-error *ngIf="createCommunity.get('nonProfitTaxId')!.hasError('cannotContainSpace')">
+                            Non Profit Tax Id cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        <div class="mat_form_button_sec">
+            <button class="formBtn_layout" mat-raised-button color="accent" type="submit" [disabled]="!createCommunity.valid">Submit</button>
+        </div>
+
+
+        </form>
+    </mat-card-content>
+</mat-card>

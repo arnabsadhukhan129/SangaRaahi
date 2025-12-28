@@ -1,0 +1,77 @@
+mat-card {
+    // max-width: 900px;
+    max-width: 650px;
+    margin: 7em auto;
+    text-align: center;
+    background: #f2f2f2;
+
+  }
+
+  .matCard_block {
+    padding: 35px;
+
+    
+  }
+
+  .mat-form-field-wrapper {
+    padding: 0 0 10px 0 !important;
+  }
+
+
+  
+  mat-form-field,mat-radio-group {
+    display: block;
+  }
+
+  mat-radio-button {
+    padding: 10px;
+  }
+  
+  form {
+      font-size: 20px;
+  }
+  
+  button {
+      font-size: 20px;;
+  }
+
+  .example-half-width {
+    width: 40%;
+  }
+
+  // img {
+  //   border-radius: 50%;
+  // }
+
+  .mat-toolbar-single-row {
+    height: auto !important;
+    background: transparent;
+    padding:10px;
+}
+
+.mat-toolbar-single-row button {
+    width: 200px;
+}
+
+#uploadFile {
+    top: 0px;
+    left: 0px;
+    width: 100%;    
+    z-index: 9;
+    opacity: 0;
+    height: 100%;
+    cursor: pointer;
+    position: absolute;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+

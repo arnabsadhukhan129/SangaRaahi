@@ -1,0 +1,36 @@
+{
+  "name": "comnet",
+  "version": "1.0.0",
+  "description": "A node app for to provide resources for the Community Network Project",
+  "main": "index.js",
+  "scripts": {
+    "copy": "cp package.json dist/ && cp books.json dist/ && cp data.json dist/",
+    "build": "tsc && npm run copy",
+    "start": "node dist/server.js",
+    "build:watch": "tsc --watch",
+    "serve": "nodemon server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "4.17.13",
+    "@types/express-graphql": "^0.9.0",
+    "@types/graphql": "^14.5.0",
+    "@types/node": "17.0.38",
+    "@types/mongoose": "^5.11.97",
+    "nodemon": "2.0.16",
+    "ts-node": "10.8.0",
+    "typescript": "4.7.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "4.18.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.5.0",
+    "graphql-tools": "^8.2.11",
+    "mongodb": "^4.6.0",
+    "mongoose": "^6.3.5"
+  }
+}

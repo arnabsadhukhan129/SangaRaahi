@@ -1,0 +1,26 @@
+<section class="backBtn_sec">
+    <div class="leftBtn_block">
+        <button class="button_appearance_none adminPage_top_back_btn" mat-raised-button [routerLink]="['/dashboard/community']">Back</button>
+    </div>
+</section>
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-card class="userView_block userView_block_userDetails">
+        <mat-card-title>Community Details</mat-card-title>
+        <mat-card-content class="matcard_userDetails_view">
+                <h3 class="content"><strong>Community Type: </strong> {{community?.communityType}}</h3>
+                <h3 class="content"><strong>Community Name: </strong> {{community?.communityName}}</h3>
+                <h3 class="content"><strong>Community Description: </strong> {{community?.communityDescription}}</h3>
+                <!-- <h3 class="content"><strong>Community Location: </strong> {{community?.communityLocation}}</h3>  -->
+                <h3 class="content"><strong>Address Line 1: </strong> {{community?.address?.firstAddressLine ? community.address.firstAddressLine:'No data yet'}}</h3>
+                <h3 class="content"><strong>Address Line 2: </strong> {{community?.address?.secondAddressLine ? community.address.secondAddressLine:'No data yet'}}</h3>
+                <h3 class="content"><strong>City: </strong> {{community?.address?.city ? community?.address?.city : 'No data yet'}}</h3>
+                <h3 class="content"><strong>State: </strong> {{community?.address?.state ? community?.address?.state : 'No data yet'}}</h3>
+                <h3 class="content"><strong>Country: </strong> {{community?.address?.country ? community?.address?.country : 'No data yet'}}</h3>
+                <h3 class="content"><strong>Zipcode: </strong> {{community?.address?.zipcode ? community?.address?.zipcode : 'No data yet'}}</h3>
+                <h3 class="content"><strong>Organization legal non-profit: </strong> {{community?.nonProfit==true ? "Yes" : 'No'}}</h3>
+                <div *ngIf="community?.nonProfit==true">
+                    <h3 class="content"><strong>Non-profit Id: </strong> {{community?.nonProfitTaxId ? community?.nonProfitTaxId : 'No data yet'}}</h3>
+                </div>
+        </mat-card-content>
+    </mat-card>
+</section>

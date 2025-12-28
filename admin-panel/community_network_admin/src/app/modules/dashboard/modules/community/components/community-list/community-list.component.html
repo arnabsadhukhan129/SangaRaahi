@@ -1,0 +1,252 @@
+<div class="listView_contBg">
+  <div class="listion_header_sec">
+    <div class="listing_header_left">
+      <h2>Community or Organization List</h2>
+    </div>
+
+
+
+
+    <div class="listing_header_right">
+      <div class="filterArea">
+        <a href="javascript:void(0)" class="filter" (click)="toggleFilter()">Filter</a>
+      </div>
+      <div class="search-bar">
+        <mat-form-field>
+          <mat-label>Search by community name</mat-label>
+          <input matInput type="text" #search (keyup)="getCommunities(1,search.value)">
+        </mat-form-field>
+        <button class="list_search_btn" mat-raised-button (click)="getCommunities(1,search.value)"><span
+            class="icon-search"></span></button>
+      </div>
+    </div>
+  </div>
+
+   <!-- ===  new filter section -- adjust start === -->
+   <div class="fliter_sec_bg" *ngIf="enableFilter">
+    <div class="filter_sec_block">
+        <form [formGroup]="filterForm">
+
+            <div class="form_row">
+              <div class="input_block_box ">
+                <div class="filter_input_block">
+
+                  <div class="filter_input_box filter_w_50 filter_search_date">
+                    <mat-form-field appearance="fill" >
+                      <mat-label>Bank Details Approval Status</mat-label>
+                      <mat-select formControlName="bankcheckStatus">
+                          <mat-option value="Approved">Approved</mat-option>
+                          <mat-option value="Not Reviewed">Not Reviewed</mat-option>
+                          <mat-option value="Rejected">Rejected</mat-option>
+                      </mat-select>
+                      <!-- <mat-error *ngIf="updateCommunity.get('nonProfit')!.hasError('required')"> Non Profit Field is Required </mat-error> -->
+                    </mat-form-field>
+                  </div>
+
+                  <div class="filter_input_box filter_w_50 filter_search_select">
+                    <mat-form-field appearance="fill" >
+                      <mat-label>Community Type</mat-label>
+                      <mat-select formControlName="communityType">
+                          <mat-option value="Social">Social</mat-option>
+                          <mat-option value="Cultural">Cultural</mat-option>
+                          <mat-option value="Religious">Religious</mat-option>
+                          <mat-option value="Others">Others</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="form_row">
+              <div class="input_block_box">
+                <div class="filter_input_block">
+
+                  <div class="filter_w_50 filter_input_box filter_search_select">
+                    <mat-form-field appearance="fill" >
+                      <mat-label>Status</mat-label>
+                      <mat-select formControlName="isActive">
+                          <mat-option value="Active">Active</mat-option>
+                          <mat-option value="Inactive">Inactive</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="filter_w_50 filter_input_box filter_search_select">
+                    <mat-form-field appearance="fill" >
+                      <mat-label>Webpage Approval Status</mat-label>
+                      <mat-select formControlName="webpageApprovalStatus">
+                          <mat-option value="not_approved">Waiting for Approval</mat-option>
+                          <mat-option value="active">Active</mat-option>
+                          <mat-option value="inactive">Inactive</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="form_row">
+              <div class="filter_input_box_btn">
+                <button class="button_appearance_none filter_btn filter_btn_clear" (click)="clearDateFilter()">Reset</button>
+                <button class="button_appearance_none filter_btn filter_btn_search" (click)="getCommunities(1, '')">Submit</button>
+              </div>
+            </div>
+
+        </form>
+    </div>
+  </div>
+   <!-- ===  new filter section -- adjust end === -->
+
+
+
+
+  <div class="listing_table_bg">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="matTableDataSource" class="mat-elevation-z8 new_mat_table" matSort
+        (matSortChange)="communitySortChange($event)">
+
+        <ng-container matColumnDef="no">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let element; let i = index;"> {{current*10-(9-i)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CommunityType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Community Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.communityType}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CommunityName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Community Name </th>
+          <td mat-cell *matCellDef="let element" ><a [routerLink]="['view/'+element.id]">{{element.communityName}}</a></td>
+        </ng-container>
+
+        <ng-container matColumnDef="WebPageLink">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Webpage Link </th>
+          <td mat-cell *matCellDef="let element">
+            <a href="{{web_page_url}}/{{element?.communitySettings?.slug}}/Home" target="_blank" *ngIf="element?.communitySettings?.slug!=null && element?.communitySettings?.slug!='' ">{{web_page_url}}/{{element?.communitySettings?.slug}}/Home</a>
+            <div *ngIf="element?.communitySettings?.slug==null || element?.communitySettings?.slug=='' ">Webpage not available</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="WebpageApproval">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Webpage Approval </th>
+          <td mat-cell *matCellDef="let element">
+            <button class="active" mat-button color="primary" *ngIf="element?.communitySettings?.webpageApprovalStatus == 'active' && element?.communitySettings?.slug!=null && element?.communitySettings?.slug!='' " >Active</button>
+            <button class="inactive" mat-button color="warn" *ngIf="element?.communitySettings?.webpageApprovalStatus != 'active' && element?.communitySettings?.slug!=null && element?.communitySettings?.slug!='' "
+            [routerLink]="['webpageApproval/'+element.id+'/'+element?.communitySettings?.slug]">Waiting for Approval</button>
+            <button  mat-button  *ngIf="element?.communitySettings?.slug==null || element?.communitySettings?.slug=='' ">NA</button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ViewPaymentBankDetails">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>View Payment Bank <br> Details</th>
+          <td mat-cell *matCellDef="let element">
+            <button class="button_appearance_none table_list_capsul_btn table_list_btn_green" mat-button (click)="openPaymentBankDetails(element.id, element?.communityPayments?.bankcheckImage, element?.communityPayments?.bankcheckStatus)" >Click Here</button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="BankDetailsApproval">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Bank Details Approval</th>
+          <td mat-cell *matCellDef="let element">
+            {{ (!element?.communityPayments?.bankcheckStatus) ? 'Not Submitted' : element?.communityPayments?.bankcheckStatus}}
+              <!-- {{( || element?.communityPayments?.bankcheckStatus==null || element?.communityPayments?.bankcheckStatus=='') ? 'Not Reviewed' : element?.communityPayments?.bankcheckStatus}} -->
+          </td>
+        </ng-container>
+
+        <!-- <ng-container matColumnDef="Owner">
+          <th mat-header-cell *matHeaderCellDef> Created By </th>
+          <td mat-cell *matCellDef="let element"> {{element.ownerDetails?.name}} </td>
+        </ng-container> -->
+
+        <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+
+          <td mat-cell *matCellDef="let element; let i = index;">
+            <div *ngIf="element.isActive;then activeBtn else inactiveBtn"></div>
+            <ng-template #activeBtn><button class="active" mat-button color="primary"
+                (click)="markActiveInactive(element.id, i, 'deactivate')">Active</button></ng-template>
+            <ng-template #inactiveBtn><button class="inactive" mat-button color="warn"
+                (click)="markActiveInactive(element.id, i, 'activate')">Inactive</button></ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Featured">
+          <th mat-header-cell *matHeaderCellDef> Featured </th>
+
+          <td mat-cell *matCellDef="let element; let i = index;">
+
+            <!-- <div *ngIf="element.isFeatured;then activeToggle else inactiveToggle"></div> -->
+            <mat-slide-toggle [checked]="element.isFeatured"
+              (click)="featuredToggle($event,element.id, i)"></mat-slide-toggle>
+            <!-- <ng-template #inactiveToggle><mat-slide-toggle (click)="featuredToggle(element.id, i)"></mat-slide-toggle></ng-template> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="PublicityPageStatus">
+          <th mat-header-cell *matHeaderCellDef> Publicity Page <br> Settings </th>
+
+          <td mat-cell *matCellDef="let element; let i = index;">
+            <mat-slide-toggle  [checked]="element?.communitySettings?.publicityPage"
+              (click)="publicityToggle($event,element.id, i)"></mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="FreezePaneSettings">
+          <th mat-header-cell *matHeaderCellDef> Freeze Pane <br> Settings </th>
+
+          <td mat-cell *matCellDef="let element; let i = index;">
+            <mat-slide-toggle  [checked]="element?.communitySettings?.freezePane"
+              (change)="freezePaneToggle($event,element.id, i)"></mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="paymentSettings">
+          <th mat-header-cell *matHeaderCellDef> Payment <br> Settings </th>
+
+          <td mat-cell *matCellDef="let element; let i = index;">
+            <mat-slide-toggle *ngIf="element?.communitySettings?.eventPaymentSettings!== false"  [checked]=true
+              (change)="paymentSettingToggle($event,element.id, i)"></mat-slide-toggle>
+            <mat-slide-toggle  *ngIf="element?.communitySettings?.eventPaymentSettings === false" [checked]=false
+              (change)="paymentSettingToggle($event,element.id, i)"></mat-slide-toggle>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <button mat-icon-button color="primary" class="btn-green" aria-label="Example icon button with a home icon" [routerLink]="['setting/'+element.id]">
+              <mat-icon>settings</mat-icon>
+            </button>
+            <!-- <button mat-icon-button color="primary" class="btn-green" aria-label="Example icon button with a home icon">
+              <mat-icon (click)="viewCommunity(element.id)">visibility</mat-icon>
+            </button> -->
+            <button mat-icon-button color="primary" class="btn-gray" aria-label="Example icon button with a home icon">
+              <mat-icon (click)="communityMember(element.id)">group</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" class="btn-orange"
+              aria-label="Example icon button with a home icon">
+              <mat-icon (click)="editCommunity(element.id)">edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" class="btn-red" aria-label="Example icon button with a home icon">
+              <mat-icon (click)="deleteCommunity(element.id, i)">delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <div class="table_no_record" *ngIf="total === 0">No records found</div>
+  </div>
+  <!-- <div *ngIf="total === 0">No records found</div> -->
+  <ng-template [ngIf]="total !== 0">
+    <div class="list_pagination">
+      <app-pagination [current]="current" [total]="total" (goTo)="onGoTo($event)" (next)="onNext($event)"
+        (previous)="onPrevious($event)"></app-pagination>
+    </div>
+  </ng-template>
+
+</div>

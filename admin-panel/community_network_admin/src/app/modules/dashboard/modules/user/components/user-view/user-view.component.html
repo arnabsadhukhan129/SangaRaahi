@@ -1,0 +1,23 @@
+<section class="backBtn_sec">
+    <div class="leftBtn_block">
+        <button class="button_appearance_none adminPage_top_back_btn" [routerLink]="['/dashboard/user']">Back</button>
+    </div>
+</section>
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-card class="userView_block userView_block_userDetails">
+        <mat-card-title>User Details</mat-card-title>
+        <mat-card-content class="matcard_userDetails_view">
+                <h3 class="content"><strong>User Type: </strong> {{user?.userType}}</h3>
+                <h3 class="content"><strong>Name: </strong> {{user?.name}}</h3>
+                <h3 class="content"><strong> Email: </strong> {{user?.email}}</h3>
+                <h3 class="content"><strong> Phone: </strong> {{user?.phone}}</h3>
+                <h3 class="content"><strong> Status: </strong> {{user?.isActive == true ? 'Active' : 'Inactive'}}</h3>
+                <h3 class="content"><strong> Address: </strong> {{user?.firstAddressLine ? user?.firstAddressLine : 'No data yet'}}</h3>
+                <h3 class="content"><strong> Birth day: </strong> {{user?.dateOfBirth?.value ? user?.dateOfBirth?.value : 'No data yet'}}</h3>
+                <h3 class="content"><strong> City: </strong> {{user?.city ? user?.city : 'No data yet'}}</h3>
+                <h3 class="content"><strong> Zipcode: </strong> {{user?.zipcode ? user?.zipcode : 'No data yet'}}</h3>
+
+                <!-- <button mat-raised-button color="accent" (click)="resetPassword(user.id.toString())">Reset Password</button> -->
+        </mat-card-content>
+    </mat-card>
+</section>

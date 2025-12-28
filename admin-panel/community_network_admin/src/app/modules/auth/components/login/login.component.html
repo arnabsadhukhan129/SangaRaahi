@@ -1,0 +1,50 @@
+<div class="login-container">
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="/assets/images/logo-white.png" alt="logo">
+        </div>
+        <mat-card class="logform_matCard_block">
+            <mat-card-content>
+                <form [formGroup]="login" (ngSubmit)="submit()" autocomplete="off">
+                    <div class="mat-title">Sign In</div>
+                    <p>
+                        <mat-form-field>
+                            <mat-label> Email: </mat-label>
+                            <input matInput type="email" formControlName="username">
+                            <mat-error *ngIf="login.get('username')!.hasError('required')">
+                                Username is Required
+                            </mat-error>
+                            <mat-error *ngIf="login.get('username')!.hasError('email')">
+                                Invalid E-Mail
+                                Pattern</mat-error>
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field>
+                            <mat-label> Password: </mat-label>
+                            <input matInput type="password" formControlName="password">
+
+                            <mat-error *ngIf="login.get('password')!.hasError('required')">
+                                Password is Required
+                            </mat-error>
+                            <mat-error *ngIf="login.get('password')!.errors">Password should be minimum of 6 characters
+                            </mat-error>
+                        </mat-form-field>
+                    </p>
+                    <br>
+                    <div class="captcha login_captcha">
+
+                        <re-captcha formControlName="recaptchaReactive"></re-captcha>
+                    </div>
+                    <button mat-raised-button color="accent" type="submit" [disabled]="!login.valid">Login</button>
+                </form>
+            </mat-card-content>
+            <a class="mat-subheading-2" routerLink="/auth/forget-password">Forgot Password</a>
+        </mat-card>
+        
+        <p>
+            <!-- <button mat-raised-button type="button" (click)="loginWithGoogle()">Login with Google </button> -->
+        </p>
+
+    </div>
+</div>

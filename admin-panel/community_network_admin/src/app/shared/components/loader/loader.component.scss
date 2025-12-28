@@ -1,0 +1,15 @@
+.loader-container {
+  position: fixed;
+  z-index: 9999;
+  border: 1px solid;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  opacity: 0.7;
+  overflow: hidden;
+}

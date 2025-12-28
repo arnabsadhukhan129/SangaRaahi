@@ -1,0 +1,21 @@
+<div>
+    <div class="mat_card_block mat_card_custom">
+        <div class="mat-title"><h1> Geofencing Setting</h1></div>
+            <form>
+                <div class="mat_form_row">
+                <label> Radius range in KM: </label>
+                <input class="input_appearance_none custom_input remove-arrows" type="number" #distance>
+                </div>
+                <!-- <div class="mat_form_row">
+                <label> Input Text: </label>
+                <input class="input_appearance_none custom_input" >
+                </div> -->
+
+                <div class="mat_form_button_sec">
+                    <button class="formBtn_layout mat-focus-indicator formBtn_layout mat-raised-button mat-button-base mat-accent" mat-raised-button color="accent" type="button" (click)="saveData(distance)">Submit</button>
+                    <button class="formBtn_layout mat-focus-indicator formBtn_layout mat-raised-button mat-button-base mat-primary" mat-raised-button color="primary" (click)="back()">Back</button>
+                </div>  
+            </form>
+    </div>
+</div>
+

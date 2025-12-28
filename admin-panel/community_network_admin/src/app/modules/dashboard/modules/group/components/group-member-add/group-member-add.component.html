@@ -1,0 +1,55 @@
+<section class="backBtn_sec">
+    <div class="leftBtn_block">
+        <button class="button_appearance_none adminPage_top_back_btn" [routerLink]="['/dashboard/group']">Back</button>
+    </div>
+</section>
+<mat-card class="matCard_block">
+    <mat-card-content>
+        <form [formGroup]="addGroupMember" (ngSubmit)="submit()" autocomplete="off">
+            <div class="mat-title"><h1>Add Members</h1></div>
+            <div class="mat_form_box">
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill">
+                        <span *ngIf="noUser === true;then no_user else user"></span>
+                        <ng-template #no_user>No members found</ng-template>
+                        <ng-template #user>Select Members</ng-template>
+                        <mat-select required formControlName="user" multiple>
+                            <mat-option #allSelected (click)="toggleAllSelection()" [value]="0">All</mat-option>
+                            <mat-option *ngFor="let element of users;" [value]="element.id" (click)="memberLength()">{{ element.name }} - {{element.contact.email.address}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="addGroupMember.get('user')!.errors"> Member is Required </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mat_form_button_sec">
+                <button class="formBtn_layout" mat-raised-button color="accent" type="submit" [disabled]="!addGroupMember.valid">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+ 
+
+
+<!-- <mat-card class="matCard_block">
+    <mat-card-content>
+        <form [formGroup]="addGroupMember" (ngSubmit)="submit()" autocomplete="off">
+            <div class="mat-title"><h1>Add Members</h1></div>
+            <div class="mat_form_box">
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Select Members</mat-label>
+                        <mat-select required formControlName="user" multiple>
+                            <mat-option #allSelected (click)="toggleAllSelection()" [value]="0">All</mat-option>
+                            <mat-option *ngFor="let element of users;" [value]="element.id" >{{ element.name }} - {{element.contact.email.address}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="addGroupMember.get('user')!.errors"> Member is Required </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mat_form_button_sec">
+                <button class="formBtn_layout" mat-raised-button color="accent" type="submit" [disabled]="!addGroupMember.valid">Submit</button>
+            </div>
+            
+        </form>
+    </mat-card-content>
+</mat-card> -->

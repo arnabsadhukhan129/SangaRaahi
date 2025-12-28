@@ -1,0 +1,23 @@
+
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <br>
+    <button style="margin-left: 10px;"mat-raised-button color="primary" [routerLink]="['/dashboard/event']">Back</button>
+    <mat-card class="userView_block userView_block_userDetails">
+        <mat-card-title>Event Details</mat-card-title>
+        <mat-card-content class="matcard_userDetails_view">
+            <h3 class="content"><strong>Event Name: </strong> {{event?.title}}</h3>
+            <h3 class="content"><strong>Event Type: </strong> {{event?.type}}</h3>
+            <h3 class="content"><strong>Event Description: </strong> {{event?.description}}</h3>
+            <h3 class="content"><strong>Community Name: </strong> {{event?.community?.communityName}}</h3>
+            <h3 class="content"><strong>Created By: </strong> {{event?.user?.name}}</h3>
+            <h3 class="content"><strong>Invitation Type: </strong> {{event?.invitationType}}</h3>
+            <h3 class="content"><strong>Address: </strong> {{event?.venueDetails?.firstAddressLine}} </h3>
+            <h3 class="content"><strong>city: </strong> {{event?.venueDetails?.city}} </h3>
+            <h3 class="content"><strong>state: </strong> {{event?.venueDetails?.state}} </h3>
+            <h3 class="content"><strong>country: </strong> {{event?.venueDetails?.country}} </h3>
+            <h3 class="content"><strong>RSVP End Time: </strong> {{rsvpend}} </h3>
+            <h3 class="content"><strong>Event start Date: </strong> {{eventFrom}} </h3>
+            <h3 class="content"><strong>Event End Date: </strong> {{eventTo}} </h3>
+        </mat-card-content>
+    </mat-card>
+</section>

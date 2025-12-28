@@ -1,0 +1,263 @@
+<mat-card class="matCard_block">
+    <mat-card-content>
+        <form [formGroup]="createEvent" (ngSubmit)="submit()" autocomplete="off" (keydown.enter)="$event.preventDefault()">
+            <div class="mat-title"><h1>{{isEdit}}</h1></div>
+            <div class="mat_form_box">
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Select Community</mat-label>
+                        <mat-select required formControlName="communityId">
+                            <mat-option *ngFor="let element of communities;" [value]="element.id">{{ element.communityName }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="createEvent.get('communityId')!.hasError('required')"> Community Type is Required </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Type</mat-label>
+                        <mat-select required formControlName="type">
+                            <mat-option value="Religious">Religious</mat-option>
+                            <mat-option value="Educational">Educational</mat-option>
+                            <mat-option value="Community Service">Community Service</mat-option>
+                            <mat-option value="Fundraising">Fundraising</mat-option>
+                            <mat-option value="Cultural">Cultural</mat-option>
+                            <mat-option value="Social">Social</mat-option>
+                            <mat-option value="Outdoor Social">Outdoor Social</mat-option>
+                            <mat-option value="Member Meeting">Member Meeting</mat-option>
+                            <mat-option value="Executive Meeting">Executive Meeting</mat-option>
+                            <mat-option value="Board Meeting">Board Meeting</mat-option>
+                            <mat-option value="Celebration">Celebration</mat-option>
+                            <mat-option value="Other">Other</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="createEvent.get('type')!.errors"> Type is Required </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Title: </mat-label>
+                        <input matInput type="text" formControlName="title">
+                        <mat-error *ngIf="createEvent.get('title')!.hasError('required') ">
+                            Title is Required
+                        </mat-error>
+                        <mat-error *ngIf="createEvent.get('title')!.hasError('cannotContainSpace')">
+                            Title cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field appearance="fill" class="description_mat">
+                        <mat-label>Event Description</mat-label>
+                        <textarea class="textarea_mat" formControlName="description" class="textarea_mat" matInput></textarea>
+                        <mat-error *ngIf="createEvent.get('description')!.hasError('required')"> Description is Required </mat-error>
+                        <mat-error *ngIf="createEvent.get('description')!.hasError('cannotContainSpace')">
+                            Event description cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row form_fileup_row">
+                    <div class="fileup_img_block">
+                      <img class="fileup_img" src="{{image}}" width="70px" height="70px" alt="Avatar" style="float: left;"/>
+                    </div>
+                    <mat-form-field class="mat_img_up">
+                      <div>
+                          <mat-toolbar>
+                          <!-- Display files names -->
+                          <input matInput placeholder="Choose Event Image" readonly type="text" name="imageName" />
+                          <!-- Browse Button -->
+                          <button mat-flat-button color="primary">Browse File</button>
+                          </mat-toolbar>
+                          <!-- Fetch selected filed on change -->
+                          <input
+                          type="file"
+                          #fileInput
+                          id="uploadFile"
+                          (change)="uploadFileToS3Bucket($event)"
+                          name="uploadFile"
+                          multiple="multiple"
+                          accept="image/*"
+                          />
+                      </div>
+                  </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Phone: </mat-label>
+                        <input matInput type="number" formControlName="phone" (keypress)="numericOnly($event)" (keydown.space)="$event.preventDefault()">
+                        <mat-error *ngIf="createEvent.get('phone')!.hasError('required')"> Valid phone is Required </mat-error>
+                        <mat-error *ngIf="createEvent.get('phone')!.hasError('min')"> Phone No. must be contain more than 7 digit</mat-error>
+                        <mat-error *ngIf="createEvent.get('phone')!.hasError('max')"> Phone No. must be contain less than 13 digit </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Address: </mat-label>
+                        <input matInput type="text" formControlName="firstAddressLine">
+                        <mat-error *ngIf="createEvent.get('firstAddressLine')!.hasError('required') ">
+                            Address is Required
+                        </mat-error>
+                        <mat-error *ngIf="createEvent.get('firstAddressLine')!.hasError('cannotContainSpace')">
+                            Address cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> City: </mat-label>
+                        <input matInput type="text" formControlName="city">
+                        <mat-error *ngIf="createEvent.get('city')!.hasError('required') ">
+                            City is Required
+                        </mat-error>
+                        <mat-error *ngIf="createEvent.get('city')!.hasError('cannotContainSpace')">
+                            City cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> State: </mat-label>
+                        <input matInput type="text" formControlName="state">
+                        <mat-error *ngIf="createEvent.get('state')!.hasError('required') ">
+                            State is Required
+                        </mat-error>
+                        <mat-error *ngIf="createEvent.get('state')!.hasError('cannotContainSpace')">
+                            State cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> country: </mat-label>
+                        <input matInput type="text" formControlName="country">
+                        <mat-error *ngIf="createEvent.get('country')!.hasError('required') ">
+                            country is Required
+                        </mat-error>
+                        <mat-error *ngIf="createEvent.get('country')!.hasError('cannotContainSpace')">
+                            country cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> zipcode: </mat-label>
+                        <input matInput type="text" formControlName="zipcode">
+                        <mat-error *ngIf="createEvent.get('zipcode')!.hasError('required') ">
+                            zipcode is Required
+                        </mat-error>
+                        <mat-error *ngIf="createEvent.get('zipcode')!.hasError('cannotContainSpace')">
+                            zipcode cannot contain whitespace
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter From Date</mat-label>
+                    <input matInput [matDatepicker]="fromDate" [min]="minFromDate" formControlName="fromDate">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                    <mat-datepicker #fromDate></mat-datepicker>
+                    <mat-error *ngIf="createEvent.get('fromDate')!.hasError('required') ">From Date is Required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter From Time</mat-label>
+                    <input matInput [ngxMatDatetimePicker]="fromTime" formControlName="fromTime">
+                    <ngx-mat-datetime-picker-toggle matSuffix></ngx-mat-datetime-picker-toggle>
+                    <ngx-mat-datetime-picker #fromTime type="time"></ngx-mat-datetime-picker>
+                    <mat-error *ngIf="createEvent.get('fromTime')!.hasError('required') ">From Time is Required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter To Date</mat-label>
+                    <input matInput [matDatepicker]="toDate" [min]="minToDate" formControlName="toDate">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+                    <mat-datepicker #toDate></mat-datepicker>
+                    <mat-error *ngIf="createEvent.get('toDate')!.hasError('required') ">To Date is Required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter To Time</mat-label>
+                    <input matInput [ngxMatDatetimePicker]="toTime" formControlName="toTime">
+                    <ngx-mat-datetime-picker-toggle matSuffix></ngx-mat-datetime-picker-toggle>
+                    <ngx-mat-datetime-picker #toTime type="time"></ngx-mat-datetime-picker>
+                    <mat-error *ngIf="createEvent.get('toTime')!.hasError('required') ">To Time is Required</mat-error>
+                </mat-form-field>
+
+                <div class="mat_form_row mat_form_row_select">
+                    <mat-form-field appearance="fill" >
+                        <mat-label>Invitation Type</mat-label>
+                        <mat-select required formControlName="invitationType">
+                            <mat-option value="Public">Public</mat-option>
+                            <mat-option value="Members">Members</mat-option>
+                            <mat-option value="Private">Private</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="createEvent.get('invitationType')!.errors"> Invitation Type is Required </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter RSVP End Date</mat-label>
+                    <input matInput [matDatepicker]="rsvpEndTime" [min]="minRSVPDate" formControlName="rsvpEndTime">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="rsvpEndTime"></mat-datepicker-toggle>
+                    <mat-datepicker #rsvpEndTime></mat-datepicker>
+                    <mat-error *ngIf="createEvent.get('rsvpEndTime')!.hasError('required') ">RSVP End Date is Required</mat-error>
+                </mat-form-field>
+
+
+
+                <div class="mat_form_row">
+                    <div class="mat_form_radio_block">
+                        <h5> Restrict number of attendees * : </h5>
+                        <div class="mat_form_radio_block_right">
+                            <mat-slide-toggle formControlName="restrictNumberAttendees" (change)="restrictAtendees()"></mat-slide-toggle>
+                        </div>
+                    </div>
+                    <mat-error *ngIf="createEvent.get('restrictNumberAttendees')!.hasError('required') "></mat-error>
+                </div>
+
+                <div class="mat_form_row">
+                    <div class="mat_form_radio_block">
+                        <h5> Post Event As Community * : </h5>
+                        <div class="mat_form_radio_block_right">
+                            <mat-slide-toggle formControlName="postEventAsCommunity"></mat-slide-toggle>
+                        </div>
+                    </div>
+                    <mat-error *ngIf="createEvent.get('postEventAsCommunity')!.hasError('required') "></mat-error>
+                </div>
+
+                <div class="mat_form_row">
+                    <div class="mat_form_radio_block">
+                        <h5> Attendees List Visibility * : </h5>
+                        <div class="mat_form_radio_block_right">
+                            <mat-slide-toggle formControlName="attendeeListVisibilty"></mat-slide-toggle>
+                        </div>
+                    </div>
+                    <mat-error *ngIf="createEvent.get('attendeeListVisibilty')!.hasError('required') "></mat-error>
+                </div>
+
+                <div class="mat_form_row">
+                    <div class="mat_form_radio_block">
+                        <h5> Is Collect Event Photos ? * : </h5>
+                        <div class="mat_form_radio_block_right">
+                            <mat-slide-toggle formControlName="collectEventPhotos"></mat-slide-toggle>
+                        </div>
+                    </div>
+                    <mat-error *ngIf="createEvent.get('collectEventPhotos')!.hasError('required') "></mat-error>
+                </div>
+                <div class="mat_form_row">
+                    <mat-form-field>
+                        <mat-label> Number Of Max Attendees: </mat-label>
+                        <input matInput type="number" (keypress)="numericOnly($event)" formControlName="numberOfMaxAttendees" (keydown.space)="$event.preventDefault()">
+                        <!-- <mat-error *ngIf="createEvent.get('numberOfMaxAttendees')!.hasError('required')"> Phone is Required </mat-error> -->
+                    </mat-form-field>
+                </div>
+
+
+                <div class="mat_form_button_sec">
+                    <button class="formBtn_layout" mat-raised-button color="accent" type="submit" [disabled]="!createEvent.valid">Submit</button>
+                    <button class="formBtn_layout" mat-raised-button color="primary" [routerLink]="['/dashboard/event']">Back</button>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

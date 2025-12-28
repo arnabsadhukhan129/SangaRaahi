@@ -1,0 +1,39 @@
+<div class="modal_block">
+  <div class="modal_close" (click)="closeDialog()">
+    <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+  </div>
+  <div class="modal_header">
+    <!-- <h2>{{data.type}}</h2> -->
+  </div>
+  <div class="modal_body">
+        <div *ngIf="(data.type=='logoImageApproval' || data.type=='bannerImageApproval');
+                then imageDiv
+                else otherDiv">
+        </div>
+
+        <ng-template #imageDiv>
+          <div class="modal_body_img">
+            <img [src]="data.content.orgLogoImage" *ngIf="data.type == 'logoImageApproval' && data.content.orgLogoImage!='' && data.content.orgLogoImage!=null ">
+            <img [src]="data.content.orgBannerImage" *ngIf="data.type == 'bannerImageApproval' && data.content.orgBannerImage!='' && data.content.orgBannerImage!=null ">
+            <span *ngIf="(data.type=='logoImageApproval' && (data.content.orgLogoImage=='' || data.content.orgLogoImage==null) ) ">No Logo Available</span>
+            <span *ngIf="(data.type=='bannerImageApproval' && (data.content.orgBannerImage=='' || data.content.orgBannerImage==null) ) ">No Image Available</span>
+          </div>
+        </ng-template>
+
+        <ng-template #otherDiv>
+          <div class="modal_body_des">
+            <div *ngIf="data.type == 'communityDescriptionApproval' ">
+              {{(data.content.orgCommunityDescription!='' && data.content.orgCommunityDescription!=null) ? data.content.orgCommunityDescription : 'No Data Available' }}
+            </div>
+          </div>
+        </ng-template>
+
+  </div>
+  <!--
+  <div class="modal_bottom">
+    <button mat-button class="button_appearance_none modal_btn modal_btn_pink" (click)="">Reject</button>
+    <button mat-button class="button_appearance_none modal_btn modal_btn_yellow" (click)="" >Approve</button>
+  </div>
+   -->
+</div>
+

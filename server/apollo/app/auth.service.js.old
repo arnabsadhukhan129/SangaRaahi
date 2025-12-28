@@ -1,0 +1,373 @@
+const User = Lib.Model('Users');
+const Authentication = Lib.Model('Authentications');
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
+const jwt = Lib.getModules('jwt');
+const crypto = require('crypto');
+const ErrorModules = require('../errors');
+const config = require("../config");
+const notificationServices = require('./notification.service');
+
+module.exports = {
+    // Admin section authentication start
+    adminLogin: async function (params) {
+        try {
+            let admin = await User.findOne({ "contact.email.address": params.email });
+            if (Lib.isEmpty(admin)) {
+                return { data: {}, message: "userNotFound", error: true };
+            }
+            if(admin.user_type != Lib.getEnum('USER_TYPE.admin')){
+                return { data: {}, message: "userNotAdmin", error: true };
+            }
+            const hashPassword = crypto.createHash('sha256').update(params.password).digest('hex');
+            if (admin.password !== hashPassword) {
+                // return { data: {}, message: "incorrectPassword", error: true };
+                return { data: {}, message: "incorrectUsernamePassword", error: true };
+            }
+           
+            return { data: {user:admin.toJSON()}, message: "generalSuccess", error: false };
+        } catch (e) {
+            if(Lib.isDevEnv()) console.log(e);
+            if(Lib.isDevEnv() || Lib.isStagingEnv()) {
+                // For local throw the error itself
+                throw e;
+            } else {
+                throw new ErrorModules.FatalError(Lib.translate("generalError"));
+            }
+        }
+    },
+
+    // Admin section authentication end
+
+    // Register service for end users
+    registerByPhone: async function (data) {
+        /**
+         * 1. Check if any user is exist
+         * 2. Generate the OTP with get random otp
+         * 3. Create a new user if does not exists with otp token
+         * 4. Return the user details to the resolver
+         */
+        try {
+            const existUser = await User.findOne({
+                "contact.phone.number": data.phone,
+                "contact.phone.phone_code": data.phoneCode,
+                "contact.phone.country_code": new RegExp(["^", data.countryCode, "$"].join(""), "i"),
+                user_type: Lib.getEnum("USER_TYPE.user")
+            });
+            if (!Lib.isEmpty(existUser)) {
+                // login flow
+                // Now check if the phone code and country code is same
+                const euser = existUser.toJSON();
+                if(euser.contact.phone.phone_code !== data.phoneCode) {
+                    return {error:true, login:true, message: Lib.translate("phoneCodeInvalid"), ErrorClass: ErrorModules.ValidationError};
+                }
+                
+                if(euser.contact.phone.country_code.toLowerCase() !== data.countryCode.toLowerCase()) {
+                    return {error:true, login:true, message: Lib.translate("countryCodeInvalid"), ErrorClass: ErrorModules.ValidationError};
+                }
+                // Now check if the use has already logged in or not
+                // For mobile ending development this is commented out. Will open when we are deploy to the server
+                /*const auth = await Authentication.findOne({ "user_id": euser._id ,"token.is_logged_in": true});
+                if(!Lib.isEmpty(auth)) {
+                    // The user is already logged in
+                    return { error: true, login: true, message: Lib.translate("userAlreadyLoggedIn"), ErrorClass: ErrorModules.AuthError };
+                }*/
+                const otp = 123456;
+                existUser.code = Lib.generateOtpToken(otp, Lib.getEnum("OTP_CAUSE._login"));
+                await existUser.save();
+                return { error: false, login: true, message: "generalSuccess", data: {user:existUser.toJSON(), otp} };
+            } else {
+                /**
+                 * Registration flow
+                 */
+                /*const user = new User({
+                    contact: {
+                        phone: {
+                            number: data.phone,
+                            country_code: data.countryCode,
+                            phone_code: data.phoneCode,
+                            is_verified: false
+                        }
+                    },
+                    user_type: Lib.getEnum("USER_TYPE.user")
+                    // code:otp_token
+                });*/
+                //let result = await user.save();
+                return { error: false, login: false, message: "generalSuccess", data: {user:{phone:data.phone, phoneCode:data.phoneCode, countryCode:data.countryCode}} };
+            }
+        } catch (e) {
+            if(Lib.isDevEnv()) console.log("Auth User", e);
+            if(Lib.isDevEnv() || Lib.isStagingEnv()) {
+                // For local throw the error itself
+                throw e;
+            } else {
+                // When in live throw a generalize error stating only the required general message
+                throw new ErrorModules.FatalError(Lib.translate("generalError"));
+            }
+        }
+    },
+    registerUserDetails: async function ({ email, name }, _user) {
+        try {
+            /**
+             * 1. Find the user.
+             * 2. Check the user
+             * 3. Generate OTP
+             * 4. Update the user with the email name otp
+             * 5. Return the call to the controller
+             */
+            const otp = 123456;
+            const code = Lib.generateOtpToken(otp, Lib.getEnum("OTP_CAUSE._auth"));
+            const user = new User({
+                name:name,
+                contact:{
+                    phone:{
+                        number:_user.phone,
+                        phone_code:_user.phoneCode,
+                        country_code:_user.countryCode,
+                        is_verified:false
+                    },
+                    email:{
+                        address:email,
+                        is_verified:false
+                    }
+                },
+                code:code,
+                user_type:Lib.getEnum("USER_TYPE.user")
+            });
+            const userSaveRes = await user.save();
+            if (Lib.isEmpty(userSaveRes)) {
+                return { error: true, message: "userNotFound" };
+            }
+            return { error: false, message: "userRegisterSuccess", data: { otp: otp, phone: _user.phone, user:userSaveRes.toJSON() } };
+        } catch (e) {
+            if (Lib.isDevEnv()) console.log("Auth User Details saved failed", e);
+            if(Lib.isDevEnv() || Lib.isStagingEnv()) {
+                throw e;
+            } else {
+                throw new ErrorModules.FatalError(Lib.translate("generalError"));
+            }
+        }
+    },
+    verifyOtp: async function (otp, user) {
+        try {
+            const muser = await User.findOne({
+                _id: ObjectId(user.id)
+            }, "_id name contact code");
+            if (Lib.isEmpty(muser)) {
+                return { error: true, message: "userNotFound", ErrorClass:ErrorModules.API404Error };
+            }
+            const code = muser.code;
+            if(!code) return {error:true, message:"notAllowed", ErrorClass:ErrorModules.GeneralApiError};
+            const data = jwt.verify(code, Lib.ENV('GENERAL_SECRET_KEY'));
+            if (data.otp === otp) {
+                // Update the user tabel
+                muser.code = null;
+                if(!muser.contact.phone.is_verified) {
+                    // Set that the phone number has been verified
+                    muser.contact.phone.is_verified = true;
+                    muser.contact.phone.verified_at = new Date();
+                }
+                await muser.save();
+                return ({error: false, message: "generalSuccess", data: {user: muser.toJSON(), cause: data.cause }});
+            }
+            return ({ error: true, message: "wrongOTP" });
+        } catch (e) {
+            if(Lib.isDevEnv()) console.log(e);
+            if(Lib.isDevEnv() || Lib.isStagingEnv()) {
+                throw e;
+            } else {
+                throw new ErrorModules.FatalError(Lib.translate(e.toString()));
+            }
+        }
+
+    },
+    resendOtp: async function(user) {
+        try {
+
+            /**
+             * 1. Decode the refersh token.
+             * 2. Generate another otp and update the user
+             * 3. Generate another access token for the OTP.
+             * 4. Send the response
+             */
+            
+            const _userRes = await User.findOne({_id:ObjectId(user.id)}, '_id code');
+            if(Lib.isEmpty(_userRes)) {
+                return {error:true, message:"userNotFound"};
+            }
+            let otp = 123456;
+            // We need to send the cauase with the user token to get the cause again in the refersh token.
+            _userRes.code = Lib.generateOtpToken(otp, user.cause);
+            await _userRes.save();
+            return {error:false, message:"generalSuccess", otp};
+        }catch(e) {
+            if(Lib.isDevEnv()) console.log(e);
+            if(Lib.isDevEnv() || Lib.isStagingEnv()) {
+                // For local throw the error itself -> This will help us to debug on staging server
+                throw e;
+            } else {
+                throw new ErrorModules.FatalError(Lib.translate("generalError"));
+            }
+        }
+    },
+    createAuthentication: async function(otp, user,req) {
+        const expireDate = new Date();
+        expireDate.setDate(expireDate.getDate() + 1);
+        const authenticationPayload = {
+            user_id        :   user.id,
+            email          :   user.email,
+            phone          :   user.phone
+        };
+
+        const statusPayload = {
+            code        : "200",
+            description : user.id+" Id Logging In.",
+        };
+        if(otp != null){
+            const otpPayload = {
+                number : otp
+            };
+            authenticationPayload['otp']    = otpPayload;
+        }
+
+        const tokenPayload = {
+            is_logged_in : true,
+            expired_at   : expireDate,
+        };
+
+        const country = {
+            country_code: user.countryCode
+        };
+
+        if(req){
+            const remotePayload = {
+                ip          : req.connection.remoteAddress,
+                country     : country,
+                user_agent  : req.headers['user-agent'] ,
+            };
+            authenticationPayload['remote'] = remotePayload;
+        }
+       
+        
+
+        authenticationPayload['status'] = statusPayload;
+        authenticationPayload['token']  = tokenPayload;
+        const authentication = new Authentication(authenticationPayload);
+        const res = await authentication.save();
+        return {error:false, message:"generalSuccess", data:{authentication:res.toJSON()}};
+    },
+
+    
+    adminPasswordChange : async function(logUser,params){
+        try {
+            const admin = await User.findOne({_id : logUser});
+            if(Lib.isEmpty(admin)) {
+                return {error:true, message:"userNotFound"};
+            }
+            if(admin.user_type == 'admin'){
+                const data = params.data;
+                if(data.newPassword === data.confirmPassword){
+                    const hashPassword = crypto.createHash('sha256').update(data.newPassword).digest('hex');
+                    console.log(hashPassword,'hashpass');
+                    await User.update({"_id":ObjectId(logUser) },{"$set" : {"password":hashPassword}});
+                }else{
+                    return {error:true, message:"New passowrd should be same as confirm password"};
+                }               
+            }else{
+                return {error:true, message:"User is not an admin"};
+            }
+            return ({error: false, message: "adminPassUpdateSuccess"});
+        } catch (error) {
+            console.log(error);
+            throw new ErrorModules.DatabaseError("User not found");
+        }
+        
+    },
+    
+    adminForgotPassword : async function(email){
+        try {
+            const admin = await User.findOne({"contact.email.address" : email});
+            
+            if(Lib.isEmpty(admin)) {
+                return {error:true, message:"userNotFound"};
+            }
+            let token;
+            if(admin.user_type == 'admin'){
+                let jwtSecretKey = process.env.JWT_SECRET_KEY;
+                let adminData = {
+                    user_id: admin._id,
+                    email: admin.contact.email.address,
+                }
+            
+                token = jwt.sign(adminData, jwtSecretKey);
+                let subject = "Admin password reset request";
+                /**
+                 * Send mail with link
+                 * sendMail parameters 
+                 * 1st param - Admin email
+                 * 2nd param - Subject
+                 * 3rd param - HTML Body
+                 */
+                // notificationServices.sendMail(email,subject,token);
+
+            }else{
+                return {error:true, message:"User is not an admin"};
+            }
+            return ({error: false, data:{token:token}});
+        } catch (error) {
+            console.log(error);
+            throw new ErrorModules.DatabaseError("User not found");
+        }
+        
+    },
+    
+    adminResetPassword : async function(params){
+        try {
+            const data = params.data;
+            var decoded;
+            let jwtSecretKey = process.env.JWT_SECRET_KEY;
+            decoded = jwt.verify(data.token, jwtSecretKey);
+            if(decoded){
+                const admin = await User.findOne({_id : decoded.user_id});
+                if(Lib.isEmpty(admin)) {
+                    return {error:true, message:"userNotFound"};
+                }
+                if(admin.user_type == 'admin'){
+                    
+                    if(data.newPassword === data.confirmPassword){
+                        const hashPassword = crypto.createHash('sha256').update(data.newPassword).digest('hex');
+                        await User.update({"_id":ObjectId(decoded.user_id) },{"$set" : {"password":hashPassword}});
+                    }else{
+                        return {error:true, message:"New passowrd should be same as confirm password"};
+                    }               
+                }else{
+                    return {error:true, message:"User is not an admin"};
+                }
+                return ({error: false, message: "adminPassUpdateSuccess"});
+                
+            }else{
+                // Access Denied
+                return {error:true, message:"unauthorized"};
+            }
+            
+            
+        } catch (error) {
+            console.log(error);
+            throw new ErrorModules.FatalError(Lib.translate("generalError"));
+        }
+    },
+    logout: async function (user) {
+        const auth = await Authentication.findOne({ "user_id": user.id ,"token.is_logged_in": true });
+        if (Lib.isEmpty(auth)) {
+            if(!user.force) return {error: true, message: Lib.resSuccess("noUserLoggedIn"), ErrorClass: ErrorModules.AuthError };
+        } else {
+            auth.token.is_logged_in = false;
+            await auth.save();
+        }
+        return {error: false, message: Lib.resSuccess("generalSuccess") };
+    },
+
+    clearAuthentication: async function() {
+        // await Authentication
+    }
+}

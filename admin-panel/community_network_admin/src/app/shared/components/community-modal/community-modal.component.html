@@ -1,0 +1,50 @@
+<div class="modal_block">
+  <div class="modal_close" (click)="closeDialog()">
+      <img class="modal_close_img" src="../../../../assets/images/delete-button-black.png">
+  </div>
+  <div class="modal_header">
+    <h2>View changed {{data.content.fieldname}} as preview</h2>
+  </div>
+  <div class="modal_body">
+
+
+      <div *ngIf="(data.content.field=='logo_image' || data.content.field=='banner_image' || data.content.field=='qrcode_image');
+                  then imageDiv
+                  else otherDiv">
+      </div>
+      <ng-template #imageDiv><img [src]="data.content.content" ></ng-template>
+
+      <ng-template #otherDiv >
+                  <div *ngIf="(data.content.field=='video');
+                  then videoDiv
+                  else textDiv">
+                  </div>
+
+                  <ng-template #textDiv>
+                    <div [innerHTML]="data.content.safeHtml"></div>
+                  </ng-template>
+
+                  <ng-template #videoDiv>
+
+                      <div class="owl_item">
+                          <a href={{data.content.content}} target="_blank">
+                            <div class="owl_item_imgVideo_block">
+                              <iframe class="owl_item_imgVideo_thumb pointer_event_none"  [src]="data.content.hlink" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+
+                            <!-- <div class="owl_item_imgVideo_title">
+                              <h5>{{video.title}}</h5>
+                            </div> -->
+                          </a>
+                        </div>
+
+                      <!-- <iframe class="owl_item_imgVideo_thumb1 pointer_event_none1"  [src]="data.content.content" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> -->
+                  </ng-template>
+      </ng-template>
+
+  </div>
+  <div class="modal_bottom">
+    <button mat-button class="button_appearance_none modal_btn modal_btn_pink" (click)="updateApprovalStatus(false, data.content.id)">Reject</button>
+    <button mat-button class="button_appearance_none modal_btn modal_btn_yellow" (click)="updateApprovalStatus(true, data.content.id)" >Approve</button>
+  </div>
+</div>

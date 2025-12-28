@@ -1,0 +1,42 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}  # Your VPS IP address or domain
+        username: ${{ secrets.SSH_USERNAME }}  # SSH username for the VPS
+        key: ${{ secrets.SSH_PRIVATE_KEY }}  # SSH private key stored in secrets
+        port: 22  # SSH port, usually 22
+        node-version: '16'
+        script: |
+          cd /var/www/projects/sangaraahi.com/SangaRaahi
+          git pull origin development  # Pull the latest code from the repository
+          cd /var/www/projects/sangaraahi.com/SangaRaahi/server/apollo
+          npm install  # Install dependencies
+          #yarn build  # Build your application     
+          yarn staging:stop && yarn staging    
+          cd /var/www/projects/sangaraahi.com/SangaRaahi/admin-panel/community_network_admin
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
+          nvm use v18
+          npm install  # Install dependencies
+          npm run build

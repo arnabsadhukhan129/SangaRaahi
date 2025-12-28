@@ -1,0 +1,11 @@
+{
+    "name":"sanga-raahi-api-staging",
+    "script": "server.js",
+    "watch": ["."],
+    "ignore_watch" : ["app/logs", "uploads"],
+    "instances" : "2",
+    "exec_mode" : "cluster",
+    "watch_options": {
+      "followSymlinks": false
+    }
+  }

@@ -1,0 +1,16 @@
+
+<section fxLayout="row wrap" fxLayoutAlign="center center">
+    <br>
+    <button style="margin-left: 10px;"mat-raised-button color="primary" [routerLink]="['/dashboard/announcement']">Back</button>
+    <mat-card class="userView_block userView_block_userDetails">
+        <mat-card-title>Announcement Details</mat-card-title>
+        <mat-card-content class="matcard_userDetails_view">
+            <h3 class="content"><strong>Announcement Name: </strong> {{announcement?.title}}</h3>
+            <h3 class="content"><strong>Announcement Type: </strong> {{announcement?.toWhom}}</h3>
+            <h3 class="content"><strong>Announcement Description: </strong> {{announcement?.description}}</h3>
+            <h3 class="content"><strong>Community Name: </strong> {{announcement?.community?.communityName}}</h3>
+            <h3 class="content"><strong>Created By: </strong> {{announcement?.user?.name}}</h3>
+            <h3 class="content"><strong>Announcement End Time: </strong> {{announcement?.endDate}} </h3>
+        </mat-card-content>
+    </mat-card>
+</section>

@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+::ng-deep .langSelect div.mat-select-arrow-wrapper {
+  display: none;
+}
+
+::ng-deep .langSelect.mat-select {
+  display: inline;
+}
+.td_action_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.promotDemote_btn {
+  // background-color: black;
+  background-color: var(--primary-color);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.promotDemote_btn:hover {
+  background-color: black;
+}
